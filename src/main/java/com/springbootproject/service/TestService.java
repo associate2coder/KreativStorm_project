@@ -26,13 +26,13 @@ public class TestService<S> {
             return testRepository.save(testObject);
     }
 
-    public List saveMultipleAtOnce(List list) {
+    public List saveMultipleAtOnce(List<TestObject> list) {
         log.info("saveAll() was called");
         return testRepository.saveAll(list);
     }
 
-    public boolean checkifItExistsById(int id) {
-        log.info("checkifItExistsById() was called");
+    public boolean checkIfItExistsById(int id) {
+        log.info("checkIfItExistsById() was called");
         return testRepository.existsById(id);
     }
 
@@ -53,7 +53,7 @@ public class TestService<S> {
 
     public String checkClass() {
         log.info("checkClass() was called");
-        return String.valueOf(testRepository.getClass());
+        return testRepository.getClass().toString();
     }
     }
 

@@ -1,5 +1,6 @@
 package com.springbootproject.controller;
 
+import com.springbootproject.dao.IdDao;
 import com.springbootproject.objects.TestObject;
 import com.springbootproject.service.TestService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class TestController {
     }
 
     @PostMapping("/addmultiplenewitemsatonce")
-    public List addMultipleNewItemsAtOnce(@RequestBody List testObjects) throws Exception {
+    public List addMultipleNewItemsAtOnce(@RequestBody List<TestObject> testObjects) throws Exception {
         log.info("addMultipleNewItemsAtOnce() was called");
         for (int i = 0; i < testObjects.size(); i++) {
             if (testObjects.get(i) == null) {
@@ -43,16 +44,16 @@ public class TestController {
         return testService.saveMultipleAtOnce(testObjects);
     }
 
-    @PostMapping("/checkifitexistsbyId")
-    public boolean checkifItExistsById(int input) {
-        log.info("checkifItExistsById() was called");
-        return testService.checkifItExistsById(input);
+    @PostMapping("/checkifitexistsbyid")
+    public boolean checkIfItExistsById(@RequestBody IdDao id) {
+        log.info("checkIfItExistsById() was called");
+        return testService.checkIfItExistsById(id.getId());
     }
 
     @PostMapping("/findbyid")
-    public Optional<TestObject> findById(int input) {
+    public Optional<TestObject> findById(@RequestBody IdDao id) {
         log.info("findById() was called");
-        return testService.findById(input);
+        return testService.findById(id.getId());
     }
 
     @PostMapping("/findall")
@@ -68,20 +69,14 @@ public class TestController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteById(int id) {
+    public void deleteById(@PathVariable int id) {
         log.info("deleteById() was called");
         testService.deleteById(id);
-    }
-
-    @PostMapping("/getall")
-    public List<TestObject> returnAll() {
-        log.info("returnAll() was called");
-        return testService.findAll();
     }
 
     @PostMapping("/checkclass")
     public String checkClass() {
         log.info("checkClass() was called");
-        return String.valueOf(testService.checkClass());
+        return testService.checkClass();
     }
 }
