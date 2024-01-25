@@ -1,8 +1,7 @@
-package com.newspringboottest.service;
+package com.springbootproject.service;
 
-
-import com.newspringboottest.objects.TestObject;
-import com.newspringboottest.repository.TestRepository;
+import com.springbootproject.objects.TestObject;
+import com.springbootproject.repository.TestRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,13 +11,13 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class TestService {
+public class TestService<S> {
 
     @Autowired
     TestRepository testRepository;
 
-    public long countAll() {
-        log.info("countAll() was called");
+    public long countAllTheRows() {
+        log.info("countAllTheRows() was called");
         return testRepository.count();
     }
 
@@ -27,12 +26,17 @@ public class TestService {
             return testRepository.save(testObject);
     }
 
-    public boolean checkifItExistsById (int id) {
+    public List saveMultipleAtOnce(List list) {
+        log.info("saveAll() was called");
+        return testRepository.saveAll(list);
+    }
+
+    public boolean checkifItExistsById(int id) {
         log.info("checkifItExistsById() was called");
         return testRepository.existsById(id);
     }
 
-    public Optional<TestObject> findById (int id) {
+    public Optional<TestObject> findById(int id) {
         log.info("findById() was called");
         return testRepository.findById(id);
     }
@@ -49,8 +53,7 @@ public class TestService {
 
     public String checkClass() {
         log.info("checkClass() was called");
-        String nameOfClass = String.valueOf(testRepository.getClass());
-        return nameOfClass;
+        return String.valueOf(testRepository.getClass());
     }
     }
 

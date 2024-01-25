@@ -1,6 +1,6 @@
-package com.newspringboottest.repository;
+package com.springbootproject.repository;
 
-import com.newspringboottest.objects.TestObject;
+import com.springbootproject.objects.TestObject;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
