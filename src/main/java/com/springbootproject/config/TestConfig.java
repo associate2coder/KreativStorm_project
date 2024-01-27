@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class TestConfig {
 
+    String testString;
+
     @Bean
     public TestObject getTestObject() {
         return new TestObject();
