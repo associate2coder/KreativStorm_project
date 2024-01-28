@@ -1,6 +1,6 @@
 package com.springbootproject.config;
 
-import com.springbootproject.object.TestObject;
+import com.springbootproject.object.Student;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -14,7 +14,7 @@ public class TestConfig {
     String testString;
 
     @Bean
-    public TestObject getTestObject() {
-        return new TestObject();
+    public Student getTestObject() {
+        return new Student();
     }
 }

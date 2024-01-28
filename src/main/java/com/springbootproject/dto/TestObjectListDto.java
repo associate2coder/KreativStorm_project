@@ -1,6 +1,6 @@
 package com.springbootproject.dto;
 
-import com.springbootproject.object.TestObject;
+import com.springbootproject.object.Student;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,9 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TestObjectListDto {
-    private List<TestObject> testObjectList;
+    private List<Student> testObjectList;
 
-    public void addTestObjectToList(TestObject testObject) {
+    public void addTestObjectToList(Student testObject) {
         testObjectList.add(testObject);
     }
 }
