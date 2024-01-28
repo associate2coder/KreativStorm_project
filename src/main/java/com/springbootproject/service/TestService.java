@@ -11,8 +11,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class TestService<S> {
-
+public class TestService {
     @Autowired
     TestRepository testRepository;
 
@@ -23,7 +22,7 @@ public class TestService<S> {
 
     public TestObject save(TestObject testObject) {
         log.info("save() was called");
-            return testRepository.save(testObject);
+        return testRepository.save(testObject);
     }
 
     public List saveMultipleAtOnce(List<TestObject> list) {
@@ -55,6 +54,6 @@ public class TestService<S> {
         log.info("checkClass() was called");
         return testRepository.getClass().toString();
     }
-    }
+}
 
 

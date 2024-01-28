@@ -4,7 +4,6 @@ import com.springbootproject.dao.IdDao;
 import com.springbootproject.object.TestObject;
 import com.springbootproject.service.TestService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,18 +41,21 @@ public class TestController {
     public TestObject addNewItem(@RequestBody TestObject testObject) throws NullPointerException {
         log.info("@RestController addNewItem() was called");
         if (testObject != null) {
-            return testService.save(testObject);
+            return studentService.save(testObject);
         } else {
             throw  new NullPointerException("it's null in TestController/addNewItem()");
         }
     }
 */
 
+    //
+
+
     //Controller version:
-    @GetMapping ("/addnewtest")
-    public ModelAndView addNewItemForm(){
+    @GetMapping("/addnew")
+    public ModelAndView addNewItemForm() {
         log.info("@Controller addNewItemForm() was called");
-        ModelAndView mav = new ModelAndView("addnewtest");
+        ModelAndView mav = new ModelAndView("addnew");
         TestObject testObjectSomething = new TestObject();
         mav.addObject("testObject", testObjectSomething);
         return mav;
@@ -70,6 +72,22 @@ public class TestController {
         }
     }
 
+    /*RestController version:
+    @PostMapping("/addmultiplenewitemsatonce")
+    public List addMultipleNewItemsAtOnce(@RequestBody List<TestObject> testObjects) throws Exception {
+        log.info("addMultipleNewItemsAtOnce() was called");
+        for (int i = 0; i < testObjects.size(); i++) {
+            if (testObjects.get(i) == null) {
+                throw new Exception("There is a null in TestController/addmultiplenewitemsatonce()");
+            }
+        }
+        return studentService.saveMultipleAtOnce(testObjects);
+    }
+
+     */
+
+
+    //Controller version
     @PostMapping("/addmultiplenewitemsatonce")
     public List addMultipleNewItemsAtOnce(@RequestBody List<TestObject> testObjects) throws Exception {
         log.info("addMultipleNewItemsAtOnce() was called");
@@ -81,6 +99,41 @@ public class TestController {
         return testService.saveMultipleAtOnce(testObjects);
     }
 
+
+    //Controller version:
+//    @GetMapping("/createList")
+//    public String showCreateForm(Model model) {
+//        TestObjectListDto testObjectListDto = new TestObjectListDto();
+//
+//        for (int i = 1; i <= 3; i++) {
+//            testObjectListDto.addTestObjectToList(new TestObject());
+//        }
+//
+//        model.addAttribute("testObjectDto", testObjectListDto);
+//        return "addnewlist";
+//    }
+//
+//    @GetMapping ("/addnewlist")
+//    public ModelAndView addNewListForm(){
+//        log.info("@Controller addNewListForm() was called");
+//        ModelAndView mav = new ModelAndView("addnewlist");
+//        TestObject testObjectSomething = new TestObject();
+//        mav.addObject("testObject", testObjectSomething);
+//        return mav;
+//    }
+//
+//    @PostMapping("/addNewListTest")
+//    public String addNewList(@ModelAttribute TestObject testObject) {
+//        log.info("@Controller addNewList() was called");
+//        if (testObject != null) {
+//            studentService.save(testObject);
+//            return "redirect:/";
+//        } else {
+//            throw new NullPointerException("It is null in TestController/addNewList()");
+//        }
+//    }
+
+    //RestController
     @PostMapping("/checkifitexistsbyid")
     public boolean checkIfItExistsById(@RequestBody IdDao id) {
         log.info("checkIfItExistsById() was called");
@@ -98,7 +151,7 @@ public class TestController {
     @PostMapping("/findall")
     public List<TestObject> findAll() {
         log.info("@RestController findAll() was called");
-        return testService.findAll();
+        return studentService.findAll();
     }
     */
 
@@ -114,7 +167,7 @@ public class TestController {
     @PostMapping("/countalltherows")
     public long countAllTheRows() {
         log.info("@RestController countAllTheRows() was called");
-        return testService.countAllTheRows();
+        return studentService.countAllTheRows();
     }
    */
 
@@ -136,7 +189,7 @@ public class TestController {
     @PostMapping("/checkclass")
     public String checkClass() {
         log.info("@RestController checkClass() was called");
-        return testService.checkClass();
+        return studentService.checkClass();
     }
       */
 
