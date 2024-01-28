@@ -1,13 +1,15 @@
 package com.springbootproject.controller;
 
 import com.springbootproject.dao.IdDao;
-import com.springbootproject.objects.TestObject;
+import com.springbootproject.object.TestObject;
 import com.springbootproject.service.TestService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,33 +39,43 @@ public class TestController {
 
         /*@RestController version
     @PostMapping("/addnewitem")
-    public TestObject addNewItem(@RequestBody TestObject testObject) throws Exception {
+    public TestObject addNewItem(@RequestBody TestObject testObject) throws NullPointerException {
         log.info("@RestController addNewItem() was called");
         if (testObject != null) {
             return testService.save(testObject);
         } else {
-            throw  new Exception("it's null in TestController/addNewItem()");
+            throw  new NullPointerException("it's null in TestController/addNewItem()");
         }
     }
 */
 
-    //Controller version
-        @PostMapping("/addnewitem")
-        public TestObject addNewItem(@RequestBody TestObject testObject) throws Exception {
-            log.info("@Controller addNewItem() was called");
-            if (testObject != null) {
-                return testService.save(testObject);
-            } else {
-                throw  new Exception("it's null in TestController/addNewItem()");
-            }
+    //Controller version:
+    @GetMapping ("/addnewtest")
+    public ModelAndView addNewItemForm(){
+        log.info("@Controller addNewItemForm() was called");
+        ModelAndView mav = new ModelAndView("addnewtest");
+        TestObject testObjectSomething = new TestObject();
+        mav.addObject("testObject", testObjectSomething);
+        return mav;
+    }
+
+    @PostMapping("/addNewItemTest")
+    public String addNewItem(@ModelAttribute TestObject testObject) {
+        log.info("@Controller addNewItem() was called");
+        if (testObject != null) {
+            testService.save(testObject);
+            return "redirect:/";
+        } else {
+            throw new NullPointerException("It is null in TestController/addNewItem()");
         }
+    }
 
     @PostMapping("/addmultiplenewitemsatonce")
     public List addMultipleNewItemsAtOnce(@RequestBody List<TestObject> testObjects) throws Exception {
         log.info("addMultipleNewItemsAtOnce() was called");
         for (int i = 0; i < testObjects.size(); i++) {
             if (testObjects.get(i) == null) {
-                throw  new Exception("There is a null in TestController/addmultiplenewitemsatonce()");
+                throw new Exception("There is a null in TestController/addmultiplenewitemsatonce()");
             }
         }
         return testService.saveMultipleAtOnce(testObjects);
@@ -130,7 +142,7 @@ public class TestController {
 
     //@Controller version
     @GetMapping("/checkclass")
-    public String checkClass(Model model){
+    public String checkClass(Model model) {
         log.info("@Controller checkClass() was called");
         model.addAttribute("className", testService.checkClass());
         return "checkclass";

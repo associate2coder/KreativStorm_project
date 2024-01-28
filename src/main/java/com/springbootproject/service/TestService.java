@@ -1,6 +1,6 @@
 package com.springbootproject.service;
 
-import com.springbootproject.objects.TestObject;
+import com.springbootproject.object.TestObject;
 import com.springbootproject.repository.TestRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class TestService<S> {
         return testRepository.count();
     }
 
-    public TestObject save(TestObject testObject) throws Exception {
+    public TestObject save(TestObject testObject) {
         log.info("save() was called");
             return testRepository.save(testObject);
     }

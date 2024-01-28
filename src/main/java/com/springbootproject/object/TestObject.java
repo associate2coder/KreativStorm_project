@@ -1,4 +1,4 @@
-package com.springbootproject.objects;
+package com.springbootproject.object;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -9,9 +9,13 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table (name="testobject")
 public class TestObject {
@@ -29,4 +33,5 @@ public class TestObject {
     @NotBlank(message= "must have an email address")
     @Email
     private String email;
+
 }
