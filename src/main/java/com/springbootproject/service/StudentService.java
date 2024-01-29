@@ -26,6 +26,20 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
+    public Student updateStudent(Student student) throws Exception {
+        log.info("updateStudent() was called");
+        Optional<Student> existingStudent = studentRepository.findById(student.getId());
+        if (existingStudent.isEmpty()) {
+            throw new Exception("Student with such id does not exist.");
+        } else {
+            existingStudent.get().setName(student.getName());
+            existingStudent.get().setAge(student.getAge());
+            existingStudent.get().setCourse(student.getCourse());
+            existingStudent.get().setEmail(student.getEmail());
+            return studentRepository.save(existingStudent.get());
+        }
+    }
+
     public List saveMultipleAtOnce(List<Student> studentList) {
         log.info("saveMultipleAtOnce() was called");
         return studentRepository.saveAll(studentList);

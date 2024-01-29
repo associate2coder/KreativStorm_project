@@ -116,18 +116,9 @@ public class StudentController {
      */
 
     //@RestController version:
-    @PostMapping("/updateexistingstudent")
-    public Student updateExistingStudent(Student student) throws Exception {
-        Optional<Student> existingStudent = studentService.findById(student.getId());
-        if (existingStudent.isEmpty()) {
-            throw new Exception("Student with such id does not exist.");
-        } else {
-            existingStudent.get().setName(student.getName());
-            existingStudent.get().setAge(student.getAge());
-            existingStudent.get().setCourse(student.getCourse());
-            existingStudent.get().setEmail(student.getEmail());
-            return  studentService.save(existingStudent.get());
-        }
+    @PutMapping("/updateexistingstudent")
+    public Student updateExistingStudent(@RequestBody Student student) throws Exception {
+        return studentService.updateStudent(student);
     }
 
     /* @Controller version: mot yet

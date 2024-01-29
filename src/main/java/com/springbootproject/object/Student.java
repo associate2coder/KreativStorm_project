@@ -23,9 +23,10 @@ public class Student {
     private String name;
 
     @Column
-    @Min(value = 1, message= "must have a value and be above 1")
+    @Min(value = 1, message = "must have a value and be above 1")
     private int age;
 
+    //always remove @NotNull before testing in Postman, causes issues
     @NotBlank(message = "course must have a value")
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "studentList")
