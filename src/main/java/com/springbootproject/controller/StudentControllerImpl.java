@@ -1,6 +1,6 @@
 package com.springbootproject.controller;
 
-import com.springbootproject.dao.IdDto;
+import com.springbootproject.dto.IdDto;
 import com.springbootproject.dto.StudentDto;
 import com.springbootproject.dto.StudentListDto;
 import com.springbootproject.object.Student;
@@ -24,17 +24,17 @@ public class StudentControllerImpl implements StudentController {
     StudentService studentService;
 
     /*@RestController version
-    @GetMapping("/test")
-    public String test() {
-        log.info("@RestController test() was called");
+    @GetMapping("/studentTest")
+    public String studentTest() {
+        log.info("@RestController studentTest() was called");
         return "Hello World";
     }
      */
 
     //@Controller version
     @GetMapping("/")
-    public String test(Model model) {
-        log.info("@Controller test() was called");
+    public String studentTest(Model model) {
+        log.info("@Controller studentTest() was called");
         model.addAttribute("helloworld", "Hello World");
         return "index";
     }
@@ -49,7 +49,6 @@ public class StudentControllerImpl implements StudentController {
             throw new NullPointerException("it's null in TestController/addNewItem()");
         }
     }
-
      */
 
     //@Controller version:
@@ -125,7 +124,6 @@ public class StudentControllerImpl implements StudentController {
     public Student updateExistingStudent(@RequestBody StudentDto studentDto) throws Exception {
         return studentService.updateStudent(studentDto);
     }
-
      */
 
     //@Controller version: mot yet
@@ -137,80 +135,78 @@ public class StudentControllerImpl implements StudentController {
 
     /*@RestController version:
     @PostMapping("/checkifstudentexistsbyid")
-    public boolean checkIfItExistsById(@RequestBody IdDto id) {
-        log.info("checkIfItExistsById() was called");
-        return studentService.checkIfItExistsById(id.getId());
+    public boolean checkIfStudentExistsById(@RequestBody IdDto id) {
+        log.info("checkIfStudentExistsById() was called");
+        return studentService.checkIfStudentExistsById(id.getId());
     }
-
      */
 
     //@Controller version
     @PostMapping("/checkifstudentexistsbyid")
-    public boolean checkIfItExistsById(@RequestBody IdDto id) {
-        log.info("checkIfItExistsById() was called");
+    public boolean checkIfStudentExistsById(@RequestBody IdDto id) {
+        log.info("checkIfStudentExistsById() was called");
         return studentService.checkIfItExistsById(id.getId());
     }
 
-
     /*@RestController version:
     @PostMapping("/findstudentbyid")
-    public Optional<Student> findById(@RequestBody IdDto id) {
-        log.info("findById() was called");
-        return studentService.findById(id.getId());
+    public Optional<Student> findStudentById(@RequestBody IdDto id) {
+        log.info("findStudentById() was called");
+        return studentService.findStudentById(id.getId());
     }
      */
 
     //@Controller version
     @PostMapping("/findstudentbyid")
-    public Optional<Student> findById(@RequestBody IdDto id) {
-        log.info("findById() was called");
+    public Optional<Student> findStudentById(@RequestBody IdDto id) {
+        log.info("findStudentById() was called");
         return studentService.findById(id.getId());
     }
 
     /*@RestController version:
     @PostMapping("/findallstudents")
-    public List<Student> findAll() {
-        log.info("@RestController findAll() was called");
-        return studentService.findAll();
+    public List<Student> findAllStudents() {
+        log.info("@RestController findAllStudents() was called");
+        return studentService.findAllStudents();
     }
      */
 
     //@Controller version
     @GetMapping("/findall")
-    public String findAll(Model model) {
-        log.info("@Controller findAll() was called");
+    public String findAllStudents(Model model) {
+        log.info("@Controller findAllStudents() was called");
         model.addAttribute("testObjectList", studentService.findAll());
         return "findall";
     }
 
     /*@RestController version
     @PostMapping("/countalltherowsinthestudenttable")
-    public long countAllTheRows() {
-        log.info("@RestController countAllTheRows() was called");
-        return studentService.countAllTheRows();
+    public long countAllTheRowsInTheStudentTable() {
+        log.info("@RestController countAllTheRowsInTheStudentTable() was called");
+        return studentService.countAllTheRowsInTheStudentTable();
     }
      */
 
     //@Controller version:
     @GetMapping("/countalltherows")
-    public String countAllTheRows(Model model) {
-        log.info("@Controller countAllTheRows() was called");
+    public String countAllTheRowsInTheStudentTable(Model model) {
+        log.info("@Controller countAllTheRowsInTheStudentTable() was called");
         model.addAttribute("numberOfRows", studentService.countAllTheRows());
         return "countalltherows";
     }
 
     /*@RestController version:
     @DeleteMapping("/deletestudent/{id}")
-    public void deleteById(@PathVariable int id) {
-        log.info("deleteById() was called");
-        studentService.deleteById(id);
+    public void deleteStudentById(@PathVariable int id) {
+        log.info("deleteStudentById() was called");
+        studentService.deleteStudentById(id);
     }
      */
 
     //@Controller
     @DeleteMapping("/deletestudent/{id}")
-    public void deleteById(@PathVariable int id) {
-        log.info("deleteById() was called");
+    public void deleteStudentById(@PathVariable int id) {
+        log.info("deleteStudentById() was called");
         studentService.deleteById(id);
     }
 

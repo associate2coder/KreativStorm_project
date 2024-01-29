@@ -1,4 +1,4 @@
-package com.springbootproject.dao;
+package com.springbootproject.dto;
 
 import lombok.Data;
 

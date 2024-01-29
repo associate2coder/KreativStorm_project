@@ -18,7 +18,7 @@ public class StudentService {
     StudentRepository studentRepository;
 
     public long countAllTheRows() {
-        log.info("countAllTheRows() was called");
+        log.info("countAllTheRowsInTheStudentTable() was called");
         return studentRepository.count();
     }
 
@@ -47,12 +47,12 @@ public class StudentService {
     }
 
     public boolean checkIfItExistsById(int id) {
-        log.info("checkIfItExistsById() was called");
+        log.info("checkIfStudentExistsById() was called");
         return studentRepository.existsById(id);
     }
 
     public Optional<Student> findById(int id) {
-        log.info("findById() was called");
+        log.info("findStudentById() was called");
         return studentRepository.findById(id);
     }
 
@@ -62,7 +62,7 @@ public class StudentService {
     }
 
     public void deleteById(int id) {
-        log.info("deleteById() was called");
+        log.info("deleteStudentById() was called");
         studentRepository.deleteById(id);
     }
 

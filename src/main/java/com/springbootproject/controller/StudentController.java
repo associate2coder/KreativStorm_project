@@ -1,6 +1,6 @@
 package com.springbootproject.controller;
 
-import com.springbootproject.dao.IdDto;
+import com.springbootproject.dto.IdDto;
 import com.springbootproject.dto.StudentDto;
 import com.springbootproject.object.Student;
 import org.springframework.ui.Model;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Optional;
 
 public interface StudentController {
-    String test(Model model);
+    String studentTest(Model model);
 
     ModelAndView addNewStudentForm();
 
@@ -26,15 +26,15 @@ public interface StudentController {
 
     Student updateExistingStudent(@RequestBody StudentDto studentDto) throws Exception;
 
-    boolean checkIfItExistsById(@RequestBody IdDto id);
+    boolean checkIfStudentExistsById(@RequestBody IdDto id);
 
-    Optional<Student> findById(@RequestBody IdDto id);
+    Optional<Student> findStudentById(@RequestBody IdDto id);
 
-    String findAll(Model model);
+    String findAllStudents(Model model);
 
-    String countAllTheRows(Model model);
+    String countAllTheRowsInTheStudentTable(Model model);
 
-    void deleteById(@PathVariable int id);
+    void deleteStudentById(@PathVariable int id);
 
     Class checkClassOfStudents(Model model);
 
