@@ -16,19 +16,15 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
     @Column
     @NotBlank(message = "name must have a value")
     private String name;
-
     @Column
     private int age;
-
     @NotBlank(message = "course must have a value")
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "studentList")
     private Course course;
-
     @Column
     @NotBlank(message = "email must have a value")
     @Email
