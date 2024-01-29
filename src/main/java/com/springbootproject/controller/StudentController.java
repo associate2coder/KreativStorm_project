@@ -37,7 +37,7 @@ public class StudentController {
     */
 
     //@RestController version
-    @PostMapping("/addnewitem")
+    @PostMapping("/addnewstudent")
     public Student addNewItem(@RequestBody Student student) throws NullPointerException {
         log.info("@RestController addNewItem() was called");
         if (student != null) {
@@ -70,7 +70,7 @@ public class StudentController {
      */
 
     //RestController version:
-    @PostMapping("/addmultiplenewitemsatonce")
+    @PostMapping("/addmultiplenewstudentsatonce")
     public List addMultipleNewItemsAtOnce(@RequestBody List<Student> students) throws Exception {
         log.info("addMultipleNewItemsAtOnce() was called");
         for (int i = 0; i < students.size(); i++) {
@@ -113,25 +113,43 @@ public class StudentController {
             throw new NullPointerException("It is null in TestController/addNewList()");
         }
     }
+     */
+
+    //@RestController version:
+    @PostMapping("/updateexistingstudent")
+    public Student updateExistingStudent(Student student) throws Exception {
+        Optional<Student> existingStudent = studentService.findById(student.getId());
+        if (existingStudent.isEmpty()) {
+            throw new Exception("Student with such id does not exist.");
+        } else {
+            existingStudent.get().setName(student.getName());
+            existingStudent.get().setAge(student.getAge());
+            existingStudent.get().setCourse(student.getCourse());
+            existingStudent.get().setEmail(student.getEmail());
+            return  studentService.save(existingStudent.get());
+        }
+    }
+
+    /* @Controller version: mot yet
 
      */
 
     //@RestController version:
-    @PostMapping("/checkifitexistsbyid")
+    @PostMapping("/checkifstudentexistsbyid")
     public boolean checkIfItExistsById(@RequestBody IdDao id) {
         log.info("checkIfItExistsById() was called");
         return studentService.checkIfItExistsById(id.getId());
     }
 
     //@RestController version:
-    @PostMapping("/findbyid")
+    @PostMapping("/findstudentbyid")
     public Optional<Student> findById(@RequestBody IdDao id) {
         log.info("findById() was called");
         return studentService.findById(id.getId());
     }
 
     //*@RestController version:
-    @PostMapping("/findall")
+    @PostMapping("/findallstudents")
     public List<Student> findAll() {
         log.info("@RestController findAll() was called");
         return studentService.findAll();
@@ -147,7 +165,7 @@ public class StudentController {
     */
 
     //@RestController version
-    @PostMapping("/countalltherows")
+    @PostMapping("/countalltherowsinthestudenttable")
     public long countAllTheRows() {
         log.info("@RestController countAllTheRows() was called");
         return studentService.countAllTheRows();
@@ -163,14 +181,14 @@ public class StudentController {
      */
 
     //@RestController version:
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/deletestudent/{id}")
     public void deleteById(@PathVariable int id) {
         log.info("deleteById() was called");
         studentService.deleteById(id);
     }
 
     //@RestController version:
-    @PostMapping("/checkclass")
+    @PostMapping("/checkclassofstudent")
     public Class checkClass() {
         log.info("@RestController checkClass() was called");
         return studentService.checkClass();
