@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,8 +27,6 @@ public class Student {
     @Min(value = 1, message = "must have a value and be above 1")
     private int age;
 
-    //always remove @NotNull before testing in Postman, causes issues
-    @NotBlank(message = "course must have a value")
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "studentList")
     private Course course;

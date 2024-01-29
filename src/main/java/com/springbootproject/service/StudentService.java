@@ -1,5 +1,6 @@
 package com.springbootproject.service;
 
+import com.springbootproject.dto.StudentDto;
 import com.springbootproject.object.Student;
 import com.springbootproject.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +22,9 @@ public class StudentService {
         return studentRepository.count();
     }
 
-    public Student save(Student student) {
+    public StudentDto save(StudentDto studentdto) {
         log.info("save() was called");
-        return studentRepository.save(student);
+        return studentRepository.save(studentdto);
     }
 
     public Student updateStudent(Student student) throws Exception {

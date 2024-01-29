@@ -5,15 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TestObjectListDto {
-    private List<Student> testObjectList;
-
-    public void addTestObjectToList(Student testObject) {
-        testObjectList.add(testObject);
-    }
+public class StudentDto extends Student {
+    private int testId;
+    private String testString;
+    private long testLong;
+    private String email;
 }
