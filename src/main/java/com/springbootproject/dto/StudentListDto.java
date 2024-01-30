@@ -13,7 +13,7 @@ import java.util.List;
 public class StudentListDto {
     private List<Student> testObjectList;
 
-    public void addTestObjectToList(Student testObject) {
-        testObjectList.add(testObject);
+    public void addStudentToList(Student student) {
+        testObjectList.add(student);
     }
 }

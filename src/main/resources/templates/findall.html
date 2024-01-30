@@ -23,11 +23,11 @@
         </thead>
         <tbody>
         <tr th:each="testObject : ${testObjectList}">
-            <th th:text="${testObject.testId}"></th>
-            <th th:text="${testObject.testString}"></th>
-            <th th:text="${testObject.testLong}"></th>
+            <th th:text="${testObject.id}"></th>
+            <th th:text="${testObject.name}"></th>
             <th th:text="${testObject.email}"></th>
         </tr>
+
 
         </tbody>
     </table>

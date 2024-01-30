@@ -1,6 +1,7 @@
 package com.springbootproject.service;
 
 import com.springbootproject.dto.StudentDto;
+import com.springbootproject.exception.StudentWithSuchAnIdDoesNotExistException;
 import com.springbootproject.object.Student;
 
 import java.util.List;
@@ -12,11 +13,13 @@ public interface StudentServiceInterface {
 
     StudentDto saveStudent(StudentDto studentdto);
 
-    Student updateStudent(StudentDto studentdto) throws Exception;
+    List<StudentDto> saveMultipleStudentsAtOnce(List<StudentDto> studentList);
 
-    boolean checkIfStudentExistsById(int id);
+    Student updateStudent(StudentDto studentdto) throws StudentWithSuchAnIdDoesNotExistException;
 
-    Optional<Student> findStudentById(int id);
+    boolean checkIfStudentExistsById(int id) throws StudentWithSuchAnIdDoesNotExistException ;
+
+    Optional<Student> findStudentById(int id) throws StudentWithSuchAnIdDoesNotExistException ;
 
     List<Student> findAllStudents();
 

@@ -1,6 +1,7 @@
 package com.springbootproject.service;
 
 import com.springbootproject.dto.StudentDto;
+import com.springbootproject.exception.StudentWithSuchAnIdDoesNotExistException;
 import com.springbootproject.object.Student;
 import com.springbootproject.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class StudentService implements StudentServiceInterface {
+public class StudentServiceImpl implements StudentServiceInterface {
 
     @Autowired
     StudentRepository studentRepository;
@@ -27,11 +28,16 @@ public class StudentService implements StudentServiceInterface {
         return studentRepository.save(studentdto);
     }
 
-    public Student updateStudent(StudentDto studentdto) throws Exception {
+    public List<StudentDto> saveMultipleStudentsAtOnce(List<StudentDto> studentList) {
+        log.info("saveMultipleStudentsAtOnce() was called");
+        return studentRepository.saveAll(studentList);
+    }
+
+    public Student updateStudent(StudentDto studentdto) throws StudentWithSuchAnIdDoesNotExistException {
         log.info("updateStudent() was called");
         Optional<Student> existingStudent = studentRepository.findById(studentdto.getId());
         if (existingStudent.isEmpty()) {
-            throw new Exception("Student with such id does not exist.");
+            throw new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist.");
         } else {
             existingStudent.get().setName(studentdto.getName());
             existingStudent.get().setAge(studentdto.getAge());
@@ -41,19 +47,22 @@ public class StudentService implements StudentServiceInterface {
         }
     }
 
-    public List saveMultipleAtOnce(List<Student> studentList) {
-        log.info("saveMultipleAtOnce() was called");
-        return studentRepository.saveAll(studentList);
-    }
-
-    public boolean checkIfStudentExistsById(int id) {
+    public boolean checkIfStudentExistsById(int id) throws StudentWithSuchAnIdDoesNotExistException {
         log.info("checkIfStudentExistsById() was called");
-        return studentRepository.existsById(id);
+        if (studentRepository.existsById(id)) {
+            return studentRepository.existsById(id);
+        } else {
+            throw  new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist.");
+        }
     }
 
-    public Optional<Student> findStudentById(int id) {
+    public Optional<Student> findStudentById(int id) throws StudentWithSuchAnIdDoesNotExistException {
         log.info("findStudentById() was called");
-        return studentRepository.findById(id);
+        if (studentRepository.findById(id) != null) {
+            return studentRepository.findById(id);
+        } else {
+            throw  new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist.");
+        }
     }
 
     public List<Student> findAllStudents() {
