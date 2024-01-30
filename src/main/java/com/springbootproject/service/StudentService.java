@@ -27,16 +27,16 @@ public class StudentService implements StudentServiceInterface {
         return studentRepository.save(studentdto);
     }
 
-    public Student updateStudent(Student student) throws Exception {
+    public Student updateStudent(StudentDto studentdto) throws Exception {
         log.info("updateStudent() was called");
-        Optional<Student> existingStudent = studentRepository.findById(student.getId());
+        Optional<Student> existingStudent = studentRepository.findById(studentdto.getId());
         if (existingStudent.isEmpty()) {
             throw new Exception("Student with such id does not exist.");
         } else {
-            existingStudent.get().setName(student.getName());
-            existingStudent.get().setAge(student.getAge());
-            existingStudent.get().setCourse(student.getCourse());
-            existingStudent.get().setEmail(student.getEmail());
+            existingStudent.get().setName(studentdto.getName());
+            existingStudent.get().setAge(studentdto.getAge());
+            existingStudent.get().setCourse(studentdto.getCourse());
+            existingStudent.get().setEmail(studentdto.getEmail());
             return studentRepository.save(existingStudent.get());
         }
     }

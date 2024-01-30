@@ -12,7 +12,7 @@ public interface StudentServiceInterface {
 
     StudentDto saveStudent(StudentDto studentdto);
 
-    Student updateStudent(Student student) throws Exception;
+    Student updateStudent(StudentDto studentdto) throws Exception;
 
     boolean checkIfStudentExistsById(int id);
 
