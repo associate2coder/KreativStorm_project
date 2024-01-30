@@ -12,17 +12,17 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class StudentService {
+public class StudentService implements StudentServiceInterface {
 
     @Autowired
     StudentRepository studentRepository;
 
-    public long countAllTheRows() {
+    public long countAllTheStudentTableRows() {
         log.info("countAllTheRowsInTheStudentTable() was called");
         return studentRepository.count();
     }
 
-    public StudentDto save(StudentDto studentdto) {
+    public StudentDto saveStudent(StudentDto studentdto) {
         log.info("save() was called");
         return studentRepository.save(studentdto);
     }
@@ -46,27 +46,27 @@ public class StudentService {
         return studentRepository.saveAll(studentList);
     }
 
-    public boolean checkIfItExistsById(int id) {
+    public boolean checkIfStudentExistsById(int id) {
         log.info("checkIfStudentExistsById() was called");
         return studentRepository.existsById(id);
     }
 
-    public Optional<Student> findById(int id) {
+    public Optional<Student> findStudentById(int id) {
         log.info("findStudentById() was called");
         return studentRepository.findById(id);
     }
 
-    public List<Student> findAll() {
+    public List<Student> findAllStudents() {
         log.info("finAll() was called");
         return studentRepository.findAll();
     }
 
-    public void deleteById(int id) {
+    public void deleteStudentById(int id) {
         log.info("deleteStudentById() was called");
         studentRepository.deleteById(id);
     }
 
-    public Class checkClass() {
+    public Class checkClassOfStudentTable() {
         log.info("checkClass() was called");
         return studentRepository.getClass();
     }
