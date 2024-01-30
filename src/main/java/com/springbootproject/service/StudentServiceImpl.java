@@ -6,6 +6,7 @@ import com.springbootproject.object.Student;
 import com.springbootproject.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,14 +24,33 @@ public class StudentServiceImpl implements StudentServiceInterface {
         return studentRepository.count();
     }
 
-    public StudentDto saveStudent(StudentDto studentdto) {
+    public Student saveStudent(StudentDto studentDto) {
         log.info("save() was called");
-        return studentRepository.save(studentdto);
+        Student student = new Student(studentDto.getId(), studentDto.getName(),studentDto.getAge(),studentDto.getEmail());
+        try {
+            return studentRepository.save(student);
+        } catch (DataIntegrityViolationException e) {
+            log.error("Data integrity violation during student save():");
+            throw new RuntimeException("Error saving student." + e.getMessage(), e);
+        }
     }
 
     public List<StudentDto> saveMultipleStudentsAtOnce(List<StudentDto> studentList) {
-        log.info("saveMultipleStudentsAtOnce() was called");
-        return studentRepository.saveAll(studentList);
+//        log.info("saveMultipleStudentsAtOnce() was called");
+//
+//        for (int i = 0; i < studentList.size(); i++) {
+//            StudentDto student = studentList.get(i);
+//            System.out.println("Student ID: " + student.getId());
+//            System.out.println("Student Name: " + student.getName());
+//            System.out.println("Student Age: " + student.getAge());
+//            System.out.println("Student Email: " + student.getEmail());
+//            // Add any additional fields you want to display
+//
+//            System.out.println("-----------------------");
+//        }
+//        Student student = new Student(studentDto.getName(),studentDto.getAge(),studentDto.getEmail());
+//        return studentRepository.saveAll(studentList);
+        return null;
     }
 
     public Student updateStudent(StudentDto studentdto) throws StudentWithSuchAnIdDoesNotExistException {
@@ -41,7 +61,6 @@ public class StudentServiceImpl implements StudentServiceInterface {
         } else {
             existingStudent.get().setName(studentdto.getName());
             existingStudent.get().setAge(studentdto.getAge());
-            existingStudent.get().setCourse(studentdto.getCourse());
             existingStudent.get().setEmail(studentdto.getEmail());
             return studentRepository.save(existingStudent.get());
         }
@@ -52,7 +71,7 @@ public class StudentServiceImpl implements StudentServiceInterface {
         if (studentRepository.existsById(id)) {
             return studentRepository.existsById(id);
         } else {
-            throw  new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist.");
+            throw new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist.");
         }
     }
 
@@ -61,7 +80,7 @@ public class StudentServiceImpl implements StudentServiceInterface {
         if (studentRepository.findById(id) != null) {
             return studentRepository.findById(id);
         } else {
-            throw  new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist.");
+            throw new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist.");
         }
     }
 

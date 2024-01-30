@@ -11,15 +11,15 @@ public interface StudentServiceInterface {
 
     long countAllTheStudentTableRows();
 
-    StudentDto saveStudent(StudentDto studentdto);
+    Student saveStudent(StudentDto studentDto);
 
     List<StudentDto> saveMultipleStudentsAtOnce(List<StudentDto> studentList);
 
     Student updateStudent(StudentDto studentdto) throws StudentWithSuchAnIdDoesNotExistException;
 
-    boolean checkIfStudentExistsById(int id) throws StudentWithSuchAnIdDoesNotExistException ;
+    boolean checkIfStudentExistsById(int id) throws StudentWithSuchAnIdDoesNotExistException;
 
-    Optional<Student> findStudentById(int id) throws StudentWithSuchAnIdDoesNotExistException ;
+    Optional<Student> findStudentById(int id) throws StudentWithSuchAnIdDoesNotExistException;
 
     List<Student> findAllStudents();
 

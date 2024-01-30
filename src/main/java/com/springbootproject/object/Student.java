@@ -29,10 +29,26 @@ public class Student {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "studentList")
+//    private Course course = getDefaultCourse();
     private Course course;
 
     @Column
     @NotBlank(message = "email must have a value")
     @Email
     private String email;
+
+    public Student(int id, String name, int age, String email) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.email = email;
+    }
+
+//    private Course getDefaultCourse() {
+//        Course defaultCourse = new Course();
+//        defaultCourse.setId(1);
+//        defaultCourse.setName("Unassigned");
+//        defaultCourse.setTeacher("No Teacher");
+//        return defaultCourse;
+//    }
 }

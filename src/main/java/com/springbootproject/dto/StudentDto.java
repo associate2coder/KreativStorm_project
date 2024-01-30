@@ -13,10 +13,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentDto extends Student {
+public class StudentDto {
     private int id;
     private String name;
     private int age;
-    private Course course;
     private String email;
 }

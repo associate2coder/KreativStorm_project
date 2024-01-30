@@ -14,13 +14,11 @@ import java.util.Optional;
 public interface StudentController {
     String studentTest(Model model);
 
-    ModelAndView addNewStudentForm();
-
-    String addNewStudent(@ModelAttribute StudentDto studentdto);
+    String addNewStudentFormDisplay(Model model);
 
     String showStudentListForm(Model model);
 
-    ModelAndView addNewStudentListForm();
+    String addNewStudentAction(@ModelAttribute StudentDto studentDto) throws NullPointerException;
 
     String addNewStudentList(@ModelAttribute StudentDto studentDto);
 
@@ -37,5 +35,4 @@ public interface StudentController {
     void deleteStudentById(@PathVariable int id);
 
     Class checkClassOfStudents(Model model);
-
-    }
+}

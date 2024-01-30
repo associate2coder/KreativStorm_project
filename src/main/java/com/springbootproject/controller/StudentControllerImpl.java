@@ -41,7 +41,6 @@ public class StudentControllerImpl implements StudentController {
 //    Student enrolled view (to show that student enrolled)
 
 
-
     @Autowired
     StudentServiceImpl studentServiceImpl;
 
@@ -74,23 +73,21 @@ public class StudentControllerImpl implements StudentController {
      */
 
     //@Controller version:
-    @GetMapping ("/addnewstudentform")
-    public ModelAndView addNewStudentForm(){
-        log.info("@Controller addNewItemForm() was called");
-        ModelAndView mav = new ModelAndView("addnew");
-        Student student = new Student();
-        mav.addObject("student", student);
-        return mav;
+    @GetMapping("student/register")
+    public String addNewStudentFormDisplay(Model model) {
+        log.info("@Controller addNewStudentForm() was called");
+        model.addAttribute("student", new StudentDto());
+        return "student/register";
     }
 
-    @PostMapping("/addnewstudent")
-    public String addNewStudent(@ModelAttribute StudentDto studentDto) {
-        log.info("@Controller addNewItem() was called");
+    @PostMapping("/addnewstudentsubmit")
+    public String addNewStudentAction(@ModelAttribute StudentDto studentDto) throws NullPointerException {
+        log.info("@Controller addNewStudent() was called");
         if (studentDto != null) {
             studentServiceImpl.saveStudent(studentDto);
             return "redirect:/";
         } else {
-            throw new NullPointerException("It is null in TestController/addNewItem()");
+            throw new NullPointerException("It is null in TestController/addNewStudent()");
         }
     }
 
@@ -109,7 +106,7 @@ public class StudentControllerImpl implements StudentController {
     */
 
     //@Controller version:
-    @GetMapping("/createstudentlist")
+    @GetMapping("student/createstudentlist")
     public String showStudentListForm(Model model) {
         StudentListDto testObjectListDto = new StudentListDto();
 
@@ -118,11 +115,11 @@ public class StudentControllerImpl implements StudentController {
         }
 
         model.addAttribute("testObjectDto", testObjectListDto);
-        return "addnewlist";
+        return "student/addnewlist";
     }
 
-    @GetMapping ("/addnewstudentlist")
-    public ModelAndView addNewStudentListForm(){
+    @GetMapping("/addnewstudentlist")
+    public ModelAndView addNewStudentListForm() {
         log.info("@Controller addNewListForm() was called");
         ModelAndView mav = new ModelAndView("addnewlist");
         Student student = new Student();
@@ -153,7 +150,6 @@ public class StudentControllerImpl implements StudentController {
     public Student updateExistingStudent(@RequestBody StudentDto studentDto) {
         return studentServiceImpl.updateStudent(studentDto);
     }
-
 
     /*@RestController version:
     @PostMapping("/checkifstudentexistsbyid")
@@ -194,11 +190,11 @@ public class StudentControllerImpl implements StudentController {
      */
 
     //@Controller version
-    @GetMapping("/findall")
+    @GetMapping("student/findall")
     public String findAllStudents(Model model) {
         log.info("@Controller findAllStudents() was called");
         model.addAttribute("testObjectList", studentServiceImpl.findAllStudents());
-        return "findall";
+        return "student/findall";
     }
 
     /*@RestController version
@@ -210,11 +206,11 @@ public class StudentControllerImpl implements StudentController {
      */
 
     //@Controller version:
-    @GetMapping("/countalltherows")
+    @GetMapping("student/countalltherows")
     public String countAllTheRowsInTheStudentTable(Model model) {
         log.info("@Controller countAllTheRowsInTheStudentTable() was called");
         model.addAttribute("numberOfRows", studentServiceImpl.countAllTheStudentTableRows());
-        return "countalltherows";
+        return "student/countalltherows";
     }
 
     /*@RestController version:
@@ -226,7 +222,7 @@ public class StudentControllerImpl implements StudentController {
      */
 
     //@Controller
-    @DeleteMapping("/deletestudent/{id}")
+    @DeleteMapping("student/deletestudent/{id}")
     public void deleteStudentById(@PathVariable int id) {
         log.info("deleteStudentById() was called");
         studentServiceImpl.deleteStudentById(id);
@@ -241,7 +237,7 @@ public class StudentControllerImpl implements StudentController {
      */
 
     //@Controller version
-    @GetMapping("/checkclassofstudents")
+    @GetMapping("student/checkclassofstudents")
     public Class checkClassOfStudents(Model model) {
         log.info("@Controller checkClass() was called");
         model.addAttribute("className", studentServiceImpl.checkClassOfStudentTable());
