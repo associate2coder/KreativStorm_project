@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @Slf4j
-public class StudentServiceImpl implements StudentServiceInterface {
+public class StudentServiceImpl implements StudentService {
 
     @Autowired
     StudentRepository studentRepository;

@@ -7,7 +7,7 @@ import com.springbootproject.object.Student;
 import java.util.List;
 import java.util.Optional;
 
-public interface StudentServiceInterface {
+public interface StudentService {
 
     long countAllTheStudentTableRows();
 
