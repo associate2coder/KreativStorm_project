@@ -16,7 +16,7 @@ public interface StudentController {
 
     String addNewStudentAction(@ModelAttribute StudentDto studentDto, Model mode) throws NullPointerException;
 
-    String addNewStudentList(@ModelAttribute StudentDto studentDto);
+    String addNewStudentList(@ModelAttribute StudentDto studentDto, Model model);
 
     Student updateExistingStudent(@RequestBody StudentDto studentDto) throws Exception;
 

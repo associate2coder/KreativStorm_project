@@ -11,9 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentListDto {
-    private List<Student> testObjectList;
+    private List<StudentDto> studentListDto;
 
-    public void addStudentToList(Student student) {
-        testObjectList.add(student);
+    public void addStudentToList(StudentDto studentDto) {
+        studentListDto.add(studentDto);
     }
 }
