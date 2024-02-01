@@ -8,7 +8,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 public interface StudentController {
-    String studentTest(Model model);
+
+//    String studentTest(Model model);
 
     String addNewStudentFormDisplay(Model model);
 

@@ -23,6 +23,8 @@ public class Course {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
     private List<Student> studentList;
 
+    // TODO @LeksUkr: capacity (int) field is needed to implement "Course is full" logic.
+
     @Override
     public String toString() {
         return "Course{" +

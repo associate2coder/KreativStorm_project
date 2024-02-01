@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Courses</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>Course</th>
+        <th>Id</th>
+        <th>Teacher</th>
+        <th>Capacity</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:if="${courses.isEmpty}">
+        <td colspan="2"> No Courses Available </td>
+    </tr>
+    <tr th:each="course : ${courses}">
+            <td><span th:text="${course.getName}">course</span></td>
+            <td><span th:text="${course.getId}">id number</span></td>
+            <td><span th:text="${course.getTeacher}">teacher</span></td>
+            <td><span th:text="${course.getStudentList.size}">capacity</span></td>
+            <td>
+                <form th:method="GET" th:action="@{/course/{id1}/{id2}(id1=${student}, id2=${course.getId})}">
+                    <input type="submit" value="Course Details">
+                </form>
+            </td>
+    </tr>
+    </tbody>
+</table>
+<br>
+<a th:method="GET" th:href="@{/}" th:text="'Back to main'"></a>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${course.getName}">Title</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body th:object="${course}">
+
+<h1 th:text="${course.getName}">Course Name</h1>
+<p th:text="${course.getTeacher}">Teacher</p>
+<!--Update capacity feature-->
+<p th:text="${course.studentList.size}">Capacity</p>
+
+
+<form th:method="PUT" th:action="@{/course/{id1}/{id2}/enroll(id1=${student}, id2=${course.getId})}">
+    <input type="submit" value="Enroll">
+</form>
+<br>
+<a th:method="GET" th:href="@{/}" th:text="'Back to main'"></a>
+</body>
+</html>

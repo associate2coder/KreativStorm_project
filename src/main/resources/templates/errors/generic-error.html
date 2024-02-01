@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error 500 - Internal Server Error</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+<div class="error-message-div">
+    <div>
+        <img th:src="@{/images/{img}(img=${filename})}" th:alt="${filename}" width="35%" height="35%">
+
+        <br>
+    <h1 th:text="${errorMessage}">Error Message</h1>
+    </div>
+</div>
+</body>
+</html>
