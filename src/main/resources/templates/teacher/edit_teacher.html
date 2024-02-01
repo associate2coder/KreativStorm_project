@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Teachers Domain</title>
+</head>
+<body>
+<h1>Update teacher</h1>
+<form th:action="@{/teachers/{id} (id=${teacher.id})}" th:object="${teacher}" method="POST">
+    <label for="name">Teacher Name</label>
+    <input type="text" name="name" id="name" th:field="*{name}"/>
+
+    <label for="email">Teacher Email</label>
+    <input type="text" name="email" id="email" th:field="*{email}"/>
+
+    <input type="submit" value="Update"/>
+</form>
+
+</body>
+</html>
