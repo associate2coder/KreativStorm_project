@@ -1,5 +1,6 @@
 package com.springbootproject.controller;
 
+import com.springbootproject.dto.TeacherDto;
 import com.springbootproject.object.Teacher;
 import com.springbootproject.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,13 @@ public class TeacherController {
     }
 
     @PostMapping("/teachers")
-    public String saveTeacher(@ModelAttribute("teacher") Teacher teacher) {
-        teacherService.saveTeacher(teacher);
-        return "redirect:/teachers";
+    public String saveTeacher(@ModelAttribute("teacher") TeacherDto teacherDto) throws NullPointerException {
+        if (teacherDto != null) {
+            teacherService.saveTeacher(teacherDto);
+            return "redirect:/teachers";
+        } else {
+            throw new NullPointerException();
+        }
     }
 
     @GetMapping("/teachers/edit/{id}")
