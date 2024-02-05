@@ -25,7 +25,7 @@ public interface StudentService {
 
     List<Student> findAllStudents();
 
-    List<StudentDto> findAllStudentsButReturnAsStudentDto() throws StudentNullException;
+    List<StudentDto> findAllStudentsButReturnAsStudentDto();
 
     void deleteStudentById(int id);
 

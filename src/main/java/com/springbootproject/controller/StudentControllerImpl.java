@@ -120,9 +120,9 @@ public class StudentControllerImpl implements StudentController {
 //    }
 
     @PostMapping("/student/addnewstudentlistform")
-    public String addNewStudentList(@ModelAttribute StudentListDto studentListDto, Model model) {
+    public String addNewStudentListAction(@ModelAttribute StudentListDto studentDtoList, Model model) {
         log.info("@Controller addNewStudentList( was called");
-        studentServiceImpl.saveMultipleStudentsAtOnce(studentListDto.getStudentDtoList());
+        studentServiceImpl.saveMultipleStudentsAtOnce(studentDtoList.getStudentDtoList());
         model.addAttribute("studentDtoList", studentServiceImpl.findAllStudentsButReturnAsStudentDto());
         return "redirect:/student/listallstudents";
     }

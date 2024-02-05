@@ -26,7 +26,7 @@ public class StudentServiceImpl implements StudentService {
                 && !studentDto.getEmail().isEmpty() && !studentDto.getEmail().isBlank()) {
             return false;
         } else {
-            throw new StudentDtoNullException("StudentDto is null in StudentServiceImpl checkIfStudentDtoIsEmpty()");
+            throw new StudentDtoNullException("StudentDto is null in StudentServiceImpl checkIfStudentDtoIsNotEmpty()");
         }
     }
 
@@ -59,16 +59,16 @@ public class StudentServiceImpl implements StudentService {
         List<Student> studentList = new ArrayList<>();
 
         for (int i = 0; i < studentDtoList.size(); i++) {
-            if (studentDtoList != null && studentDtoList.get(i) != null && checkIfStudentDtoIsNotEmpty(studentDtoList.get(i))) {
+//            if (studentDtoList != null && studentDtoList.get(i) != null && checkIfStudentDtoIsNotEmpty(studentDtoList.get(i))) {
                 Student student = new Student();
                 student.setId(studentDtoList.get(i).getId());
                 student.setName(studentDtoList.get(i).getName());
                 student.setAge(studentDtoList.get(i).getAge());
                 student.setEmail(studentDtoList.get(i).getEmail());
                 studentList.add(student);
-            } else {
-                throw new StudentDtoNullException("StudentDto is null in StudentServiceImpl saveMultipleStudentsAtOnce()");
-            }
+//            } else {
+//                throw new StudentDtoNullException("StudentDto is null in StudentServiceImpl saveMultipleStudentsAtOnce()");
+//            }
         }
         return studentRepository.saveAll(studentList);
     }
@@ -108,21 +108,21 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    public List<StudentDto> findAllStudentsButReturnAsStudentDto() throws StudentNullException {
+    public List<StudentDto> findAllStudentsButReturnAsStudentDto() {
         List<StudentDto> listOfCurrentStudentsWithValuesButConvertedToStudentDTO = new ArrayList<>();
         log.info("findAllStudentsButReturnAsStudentDto() was called");
         List<Student> studentListWithActualValues = studentRepository.findAll();
         for (int i = 0; i < studentListWithActualValues.size(); i++) {
-            if (studentListWithActualValues.get(i) != null && checkIfStudentIsNotEmpty(studentListWithActualValues.get(i))) {
+//            if (studentListWithActualValues.get(i) != null && checkIfStudentIsNotEmpty(studentListWithActualValues.get(i))) {
                 StudentDto studentDto = new StudentDto();
                 studentDto.setId(studentListWithActualValues.get(i).getId());
                 studentDto.setName(studentListWithActualValues.get(i).getName());
                 studentDto.setAge(studentListWithActualValues.get(i).getAge());
                 studentDto.setEmail(studentListWithActualValues.get(i).getEmail());
                 listOfCurrentStudentsWithValuesButConvertedToStudentDTO.add(studentDto);
-            } else {
-                throw new StudentNullException("StudentDto is null in StudentServiceImpl findAllStudentsButReturnAsStudentDto()");
-            }
+//            } else {
+//                throw new StudentNullException("StudentDto is null in StudentServiceImpl findAllStudentsButReturnAsStudentDto()");
+//            }
         }
         return listOfCurrentStudentsWithValuesButConvertedToStudentDTO;
     }

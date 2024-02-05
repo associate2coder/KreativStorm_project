@@ -18,7 +18,7 @@ public interface StudentController {
 
     String addNewStudentAction(@ModelAttribute StudentDto studentDto, Model mode) throws NullPointerException;
 
-    String addNewStudentList(@ModelAttribute StudentListDto studentListDto, Model model);
+    String addNewStudentListAction(@ModelAttribute StudentListDto studentListDto, Model model);
 
     String updateExistingStudent(@PathVariable int id, Model model) throws StudentWithSuchAnIdDoesNotExistException;
 
