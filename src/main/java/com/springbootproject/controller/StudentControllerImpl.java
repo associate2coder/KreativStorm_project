@@ -53,12 +53,12 @@ public class StudentControllerImpl implements StudentController {
      */
 
     //@Controller version
-    @GetMapping("/")
-    public String studentTest(Model model) {
-        log.info("@Controller studentTest() was called");
-        model.addAttribute("helloworld", "Hello World");
-        return "index";
-    }
+//    @GetMapping("/")
+//    public String studentTest(Model model) {
+//        log.info("@Controller studentTest() was called");
+//        model.addAttribute("helloworld", "Hello World");
+//        return "index";
+//    }
 
     /*@RestController version
     @PostMapping("/addnewstudent")

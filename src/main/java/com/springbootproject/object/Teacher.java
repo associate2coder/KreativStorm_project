@@ -20,4 +20,24 @@ public class Teacher {
 
     @Column(name = "email")
     private String email;
+
+    public boolean equals(Object o){
+
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof Teacher)) {
+            return false;
+        }
+
+        Teacher compared = (Teacher) o;
+
+        if( this.id == compared.id && this.name.equals(compared.name)
+                && this.email.equals(compared.email)) {
+            return true;
+        }
+
+        return false;
+    }
 }
