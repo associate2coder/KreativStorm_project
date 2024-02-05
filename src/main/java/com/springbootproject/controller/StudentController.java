@@ -1,7 +1,8 @@
 package com.springbootproject.controller;
 
 import com.springbootproject.dto.StudentDto;
-import com.springbootproject.object.Student;
+import com.springbootproject.dto.StudentListDto;
+import com.springbootproject.exception.StudentWithSuchAnIdDoesNotExistException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,11 +18,13 @@ public interface StudentController {
 
     String addNewStudentAction(@ModelAttribute StudentDto studentDto, Model mode) throws NullPointerException;
 
-    String addNewStudentList(@ModelAttribute StudentDto studentDto, Model model);
+    String addNewStudentList(@ModelAttribute StudentListDto studentListDto, Model model);
 
-    Student updateExistingStudent(@RequestBody StudentDto studentDto) throws Exception;
+    String updateExistingStudent(@PathVariable int id, Model model) throws StudentWithSuchAnIdDoesNotExistException;
 
-    boolean checkIfStudentExistsById(@RequestBody int id);
+    String updateExistingStudentForm(@RequestBody StudentDto studentDto);
+
+    boolean checkIfStudentExistsById(int id);
 
     String findStudentById(@RequestBody int id, Model model);
 
@@ -29,5 +32,5 @@ public interface StudentController {
 
     String countAllTheRowsInTheStudentTable(Model model);
 
-    Class checkClassOfStudents(Model model);
+    String checkClassOfStudentTable(Model model);
 }
