@@ -33,7 +33,7 @@ public class Teacher {
 
         Teacher compared = (Teacher) o;
 
-        if( this.id == compared.id && this.name.equals(compared.name)
+        if (this.id == compared.id && this.name.equals(compared.name)
                 && this.email.equals(compared.email)) {
             return true;
         }
