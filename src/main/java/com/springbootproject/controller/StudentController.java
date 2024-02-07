@@ -1,7 +1,11 @@
 package com.springbootproject.controller;
 
+import com.springbootproject.dto.IdDto;
 import com.springbootproject.dto.StudentDto;
-import com.springbootproject.object.Student;
+import com.springbootproject.dto.StudentDtoListDto;
+import com.springbootproject.exception.student.StudentDtoListDtoInputException;
+import com.springbootproject.exception.student.StudentDtoNullException;
+import com.springbootproject.exception.student.StudentWithSuchAnIdDoesNotExistException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,21 +17,27 @@ public interface StudentController {
 
     String addNewStudentFormDisplay(Model model);
 
-    String showStudentListForm(Model model);
+    String addNewStudentAction(@ModelAttribute StudentDto studentDto, Model mode) throws StudentDtoNullException;
 
-    String addNewStudentAction(@ModelAttribute StudentDto studentDto, Model mode) throws NullPointerException;
+    String addStudentDtoListPage(Model model);
 
-    String addNewStudentList(@ModelAttribute StudentDto studentDto, Model model);
+    boolean testIfStudentListDtoInputIsCorrect(StudentDtoListDto studentDtoListDto) throws StudentDtoListDtoInputException;
 
-    Student updateExistingStudent(@RequestBody StudentDto studentDto) throws Exception;
+    String addNewStudentListFormAction(@ModelAttribute StudentDtoListDto studentDtoList, Model model) throws StudentDtoListDtoInputException;
 
-    boolean checkIfStudentExistsById(@RequestBody int id);
+    String updateExistingStudent(@PathVariable int id, Model model) throws StudentWithSuchAnIdDoesNotExistException;
 
-    String findStudentById(@RequestBody int id, Model model);
+    String updateExistingStudentForm(@RequestBody StudentDto studentDto);
+
+    boolean checkIfStudentExistsById(int id);
+
+    String findStudentById(@RequestBody int id, Model model) throws  StudentWithSuchAnIdDoesNotExistException;
 
     String findAllStudents(Model model);
 
+    String deleteStudentById(@ModelAttribute IdDto idOfStudentToBeDeleted, Model model);
+
     String countAllTheRowsInTheStudentTable(Model model);
 
-    Class checkClassOfStudents(Model model);
+    String checkClassOfStudentTable(Model model);
 }

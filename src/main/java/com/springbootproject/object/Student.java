@@ -29,7 +29,6 @@ public class Student {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "studentList")
-//    private Course course = getDefaultCourse();
     private Course course;
 
     @Column
