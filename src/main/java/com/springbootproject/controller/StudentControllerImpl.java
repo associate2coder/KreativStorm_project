@@ -47,6 +47,15 @@ public class StudentControllerImpl implements StudentController {
 
 
     /*@RestController version
+    @GetMapping("/studentTest")
+    public String studentTest() {
+        log.info("@RestController studentTest() was called");
+        return "Hello World";
+    }
+     */
+
+
+    /*@RestController version
     @PostMapping("/addnewstudent")
     public Student addNewItem(@RequestBody Student student) throws NullPointerException {
         log.info("@RestController addNewItem() was called");
