@@ -3,6 +3,8 @@ package com.springbootproject.controller;
 import com.springbootproject.dto.IdDto;
 import com.springbootproject.dto.StudentDto;
 import com.springbootproject.dto.StudentListDto;
+import com.springbootproject.exception.StudentDtoNullException;
+import com.springbootproject.exception.StudentWithSuchAnIdDoesNotExistException;
 import com.springbootproject.object.Student;
 import com.springbootproject.service.StudentServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.Optional;
 
@@ -44,6 +45,7 @@ public class StudentControllerImpl implements StudentController {
     @Autowired
     StudentServiceImpl studentServiceImpl;
 
+
     /*@RestController version
     @GetMapping("/studentTest")
     public String studentTest() {
@@ -52,13 +54,6 @@ public class StudentControllerImpl implements StudentController {
     }
      */
 
-    //@Controller version
-//    @GetMapping("/")
-//    public String studentTest(Model model) {
-//        log.info("@Controller studentTest() was called");
-//        model.addAttribute("helloworld", "Hello World");
-//        return "index";
-//    }
 
     /*@RestController version
     @PostMapping("/addnewstudent")
@@ -81,7 +76,7 @@ public class StudentControllerImpl implements StudentController {
     }
 
     @PostMapping("student/addnewstudentsubmit")
-    public String addNewStudentAction(@ModelAttribute StudentDto studentDto, Model model) throws NullPointerException {
+    public String addNewStudentAction(@ModelAttribute StudentDto studentDto, Model model) throws StudentDtoNullException {
         log.info("@Controller addNewStudent() was called");
         if (studentDto != null) {
             studentServiceImpl.saveStudent(studentDto);
@@ -91,7 +86,7 @@ public class StudentControllerImpl implements StudentController {
         } else {
             model.addAttribute("successfulRegistration", true);
             model.addAttribute("failureAtRegistrationMessage", "Student registration failed.");
-            throw new NullPointerException("It is null in TestController/addNewStudent()");
+            throw new StudentDtoNullException("StudentDto is null in StudentControllerImpl/addNewStudentAction()");
         }
     }
 
@@ -112,13 +107,15 @@ public class StudentControllerImpl implements StudentController {
     //@Controller version:
     @GetMapping("student/addnewstudentlist")
     public String showStudentListForm(Model model) {
-        StudentListDto studentListDto = new StudentListDto();
+        log.info("@Controller addNewStudentListForm() was called");
+        StudentListDto studentDtoList = new StudentListDto();
 
-        for (int i = 1; i <= 10; i++) {
-            studentListDto.addStudentToList(new StudentDto(1,"test",1,"test@test.com"));
+        for (int i = 1; i <= 3; i++) {
+//            studentDtoList.addStudentDto(new StudentDto(1,"test",2,"test@test.com"));
+            studentDtoList.addStudentDto(new StudentDto());
         }
 
-        model.addAttribute("studentListDto", studentListDto);
+        model.addAttribute("studentDtoListForm", studentDtoList);
         return "student/addnewstudentlist";
     }
 
@@ -131,17 +128,25 @@ public class StudentControllerImpl implements StudentController {
 //        return mav;
 //    }
 
-    @PostMapping("student/addnewstudentlist")
-    public String addNewStudentList(@ModelAttribute StudentDto studentDto, Model model) {
+    @PostMapping("/student/addnewstudentlistform")
+    public String addNewStudentListAction(@ModelAttribute StudentListDto studentDtoList, Model model) {
         log.info("@Controller addNewStudentList( was called");
-        if (studentDto != null) {
-            studentServiceImpl.saveStudent(studentDto);
-            return "redirect:/";
-        } else {
-            throw new NullPointerException("It is null in TestController/addNewStudentList()");
-        }
+        studentServiceImpl.saveMultipleStudentsAtOnce(studentDtoList.getStudentDtoList());
+        model.addAttribute("studentDtoList", studentServiceImpl.findAllStudentsButReturnAsStudentDto());
+        return "redirect:/student/listallstudents";
     }
 
+//    @PostMapping("student/addnewstudentlistform")
+//    public String addNewStudentList(@ModelAttribute List<StudentDto> studentDtoList, RedirectAttributes redirectAttribute) {
+//        log.info("@Controller addNewStudentList( was called");
+//        if (studentDtoList != null) {
+//            studentServiceImpl.saveMultipleStudentsAtOnce(studentDtoList);
+//            redirectAttribute.addFlashAttribute("successMessage", "Student saved successfully.");
+//            return "student/addnewstudentlist";
+//        } else {
+//            throw new NullPointerException("It is null in TestController/addNewStudentList()");
+//        }
+//    }
 
     /*@RestController version:
     @PutMapping("/updateexistingstudent")
@@ -150,10 +155,36 @@ public class StudentControllerImpl implements StudentController {
     }
      */
 
-    //@Controller version: mot yet
-    @PutMapping("/updateexistingstudent")
-    public Student updateExistingStudent(@RequestBody StudentDto studentDto) {
-        return studentServiceImpl.updateStudent(studentDto);
+    //@Controller version:
+    @GetMapping("/student/update/{id}")
+    public String updateExistingStudent(@PathVariable int id, Model model) throws StudentWithSuchAnIdDoesNotExistException {
+        log.info("@Controller updateExistingStudent() was called");
+
+        StudentDto studentDto = new StudentDto();
+        Student student;
+
+        if (checkIfStudentExistsById(id)) {
+            Optional<Student> studentOptional = studentServiceImpl.findStudentById(id);
+            student = studentOptional.orElse(new Student(1, "No name", 1, "no@no.com"));
+            studentDto.setId(student.getId());
+            studentDto.setName(student.getName());
+            studentDto.setAge(student.getAge());
+            studentDto.setEmail(student.getEmail());
+        } else {
+            throw new StudentWithSuchAnIdDoesNotExistException("Student with such id does not exist");
+        }
+
+        model.addAttribute("studentDto", studentDto);
+        return "/student/updateexistingstudent";
+    }
+
+    @PostMapping("/student/updatexistingstudentform")
+    public String updateExistingStudentForm(@ModelAttribute StudentDto studentDto) {
+            log.info("@Controller updateExistingStudent() was called");
+            studentServiceImpl.saveStudent(studentDto);
+            int id = studentDto.getId();
+
+        return "redirect:/student/update/" + id;
     }
 
     /*@RestController version:
@@ -164,11 +195,9 @@ public class StudentControllerImpl implements StudentController {
     }
      */
 
-    //@Controller version
-    @PostMapping("/checkifstudentexistsbyid")
-    public boolean checkIfStudentExistsById(@RequestBody int id) {
-        log.info("checkIfStudentExistsById() was called");
-        return studentServiceImpl.checkIfStudentExistsById(id);
+    //@Controller version (not displayed on separate page):
+    public boolean checkIfStudentExistsById(int id) {
+        return studentServiceImpl.findStudentById(id).isPresent();
     }
 
     /*@RestController version:
@@ -180,7 +209,7 @@ public class StudentControllerImpl implements StudentController {
      */
 
     //@Controller version
-    @GetMapping("student/{id}")
+    @GetMapping("/student/{id}")
     public String findStudentById(@PathVariable int id, Model model) {
         log.info("findStudentById() was called");
         StudentDto studentDto = new StudentDto();
@@ -196,14 +225,10 @@ public class StudentControllerImpl implements StudentController {
         }
 
         model.addAttribute("studentDto", studentDto);
-        //
-        log.info("@Controller deleteStudentForm() was called");
         IdDto idDto = new IdDto();
         model.addAttribute("idOfStudentToBeDeleted", idDto);
-        return "student/studentinfo";
+        return "/student/studentinfo";
     }
-
-
 
     /*@RestController version:
     @PostMapping("/findallstudents")
@@ -221,22 +246,6 @@ public class StudentControllerImpl implements StudentController {
         return "student/listallstudents";
     }
 
-    /*@RestController version
-    @PostMapping("/countalltherowsinthestudenttable")
-    public long countAllTheRowsInTheStudentTable() {
-        log.info("@RestController countAllTheRowsInTheStudentTable() was called");
-        return studentServiceImpl.countAllTheRowsInTheStudentTable();
-    }
-     */
-
-    //@Controller version:
-    @GetMapping("student/countallthestudenttablerows")
-    public String countAllTheRowsInTheStudentTable(Model model) {
-        log.info("@Controller countAllTheRowsInTheStudentTable() was called");
-        model.addAttribute("numberOfRowsInTheStudentTable", studentServiceImpl.countAllTheStudentTableRows());
-        return "student/countallthestudenttablerows";
-    }
-
     /*@RestController version:
     @DeleteMapping("/deletestudent/{id}")
     public void deleteStudentById(@PathVariable int id) {
@@ -245,23 +254,30 @@ public class StudentControllerImpl implements StudentController {
     }
      */
 
-    //@Controller
-//    @GetMapping("student/studentinfo")
-//    public String deleteStudentByIdForm(Model model) {
-//        log.info("@Controller deleteStudentForm() was called");
-//        IdDto idDto = new IdDto();
-//        model.addAttribute("idOfStudentToBeDeleted", idDto);
-//        return "student/studentinfo";
-//    }
-
-    @PostMapping ("student/deletestudent")
+    @PostMapping("/student/deletestudent")
     public String deleteStudentById(@ModelAttribute IdDto idOfStudentToBeDeleted, Model model) {
         log.info("@Controller deleteStudentById() was called");
         studentServiceImpl.deleteStudentById(idOfStudentToBeDeleted.getId());
         model.addAttribute("studentDeletedMessage", "Student with the id: " + idOfStudentToBeDeleted.getId() + " was deleted.");
         model.addAttribute("studentDeleted", true);
         model.addAttribute("idOfStudentToBeDeleted", new IdDto());
-        return "student/studentinfo";
+        return "/student/studentinfo";
+    }
+
+        /*@RestController version
+    @PostMapping("/countalltherowsinthestudenttable")
+    public long countAllTheRowsInTheStudentTable() {
+        log.info("@RestController countAllTheRowsInTheStudentTable() was called");
+        return studentServiceImpl.countAllTheRowsInTheStudentTable();
+    }
+     */
+
+    //@Controller version:
+    @GetMapping("/student/countallthestudenttablerows")
+    public String countAllTheRowsInTheStudentTable(Model model) {
+        log.info("@Controller countAllTheRowsInTheStudentTable() was called");
+        model.addAttribute("numberOfRowsInTheStudentTable", studentServiceImpl.countAllTheStudentTableRows());
+        return "/student/countallthestudenttablerows";
     }
 
     /*@RestController version:
@@ -273,10 +289,10 @@ public class StudentControllerImpl implements StudentController {
      */
 
     //@Controller version
-    @GetMapping("student/checkclassofstudents")
-    public Class checkClassOfStudents(Model model) {
-        log.info("@Controller checkClass() was called");
-        model.addAttribute("className", studentServiceImpl.checkClassOfStudentTable());
-        return studentServiceImpl.checkClassOfStudentTable();
+    @GetMapping("/student/checkclassofstudenttable")
+    public String checkClassOfStudentTable(Model model) {
+        log.info("@Controller checkClassOfStudentTable() was called");
+        model.addAttribute("classOfStudentTable", studentServiceImpl.checkClassOfStudentTable());
+        return "/student/checkclassofstudenttable";
     }
 }

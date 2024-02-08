@@ -1,11 +1,5 @@
 package com.springbootproject.dto;
 
-import com.springbootproject.object.Course;
-import com.springbootproject.object.Student;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

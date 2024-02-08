@@ -30,12 +30,11 @@
     </tr>
     </tbody>
 </table>
-<!--    <input type="hidden" name="_method" value="DELETE" />-->
+Delete student with the following Id:
 <form th:action="@{/student/deletestudent}" th:object="${idOfStudentToBeDeleted}" method="post">
     <input type="number" th:field="*{id}" placeholder="Id:" class="form-control col-4 mb-4" />
     <button class="btn btn-primary" type="submit">Delete</button>
 </form>
-
 <div th:if="${studentDeleted}" class="alert alert-success">
     <p th:text="${studentDeletedMessage}"></p>
 </body>

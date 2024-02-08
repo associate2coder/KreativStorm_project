@@ -1,14 +1,16 @@
 package com.springbootproject.service;
 
 import com.springbootproject.dto.StudentDto;
+import com.springbootproject.exception.StudentDtoNullException;
+import com.springbootproject.exception.StudentNullException;
 import com.springbootproject.exception.StudentWithSuchAnIdDoesNotExistException;
 import com.springbootproject.object.Student;
 import com.springbootproject.repository.StudentRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,50 +21,72 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     StudentRepository studentRepository;
 
+    public boolean checkIfStudentDtoIsNotEmpty(StudentDto studentDto) throws StudentDtoNullException {
+        if (studentDto != null && studentDto.getId() != 0 && !studentDto.getName().isBlank() && !studentDto.getName().isEmpty()
+                && !studentDto.getEmail().isEmpty() && !studentDto.getEmail().isBlank()) {
+            return false;
+        } else {
+            throw new StudentDtoNullException("StudentDto is null in StudentServiceImpl checkIfStudentDtoIsNotEmpty()");
+        }
+    }
+
+    public boolean checkIfStudentIsNotEmpty(Student student) throws StudentNullException {
+        if (student != null && student.getId() != 0 && !student.getName().isBlank() && !student.getName().isEmpty()
+                && !student.getEmail().isEmpty() && !student.getEmail().isBlank()) {
+            return false;
+        } else {
+            throw new StudentDtoNullException("Student is null in StudentServiceImpl checkIfStudentIsEmpty()");
+        }
+    }
+
     public long countAllTheStudentTableRows() {
         log.info("countAllTheRowsInTheStudentTable() was called");
         return studentRepository.count();
     }
 
-    public Student saveStudent(StudentDto studentDto) {
-        log.info("save() was called");
-        Student student = new Student(studentDto.getId(), studentDto.getName(),studentDto.getAge(),studentDto.getEmail());
-        try {
+    public Student saveStudent(StudentDto studentDto) throws StudentDtoNullException {
+        log.info("saveStudent() was called");
+        if (checkIfStudentDtoIsNotEmpty(studentDto)) {
+            Student student = new Student(studentDto.getId(), studentDto.getName(), studentDto.getAge(), studentDto.getEmail());
             return studentRepository.save(student);
-        } catch (DataIntegrityViolationException e) {
-            log.error("Data integrity violation during student save():");
-            throw new RuntimeException("Error saving student." + e.getMessage(), e);
+        } else {
+            throw new StudentDtoNullException("StudentDto is null in StudentServiceImpl saveStudent()");
         }
     }
 
-    public List<StudentDto> saveMultipleStudentsAtOnce(List<StudentDto> studentList) {
-//        log.info("saveMultipleStudentsAtOnce() was called");
-//
-//        for (int i = 0; i < studentList.size(); i++) {
-//            StudentDto student = studentList.get(i);
-//            System.out.println("Student ID: " + student.getId());
-//            System.out.println("Student Name: " + student.getName());
-//            System.out.println("Student Age: " + student.getAge());
-//            System.out.println("Student Email: " + student.getEmail());
-//            // Add any additional fields you want to display
-//
-//            System.out.println("-----------------------");
-//        }
-//        Student student = new Student(studentDto.getName(),studentDto.getAge(),studentDto.getEmail());
-//        return studentRepository.saveAll(studentList);
-        return null;
+    public List<Student> saveMultipleStudentsAtOnce(List<StudentDto> studentDtoList) throws StudentDtoNullException {
+        log.info("saveMultipleStudentsAtOnce() was called");
+        List<Student> studentList = new ArrayList<>();
+
+        for (int i = 0; i < studentDtoList.size(); i++) {
+//            if (studentDtoList != null && studentDtoList.get(i) != null && checkIfStudentDtoIsNotEmpty(studentDtoList.get(i))) {
+                Student student = new Student();
+                student.setId(studentDtoList.get(i).getId());
+                student.setName(studentDtoList.get(i).getName());
+                student.setAge(studentDtoList.get(i).getAge());
+                student.setEmail(studentDtoList.get(i).getEmail());
+                studentList.add(student);
+//            } else {
+//                throw new StudentDtoNullException("StudentDto is null in StudentServiceImpl saveMultipleStudentsAtOnce()");
+//            }
+        }
+        return studentRepository.saveAll(studentList);
     }
 
-    public Student updateStudent(StudentDto studentdto) throws StudentWithSuchAnIdDoesNotExistException {
+    public Student updateStudent(StudentDto studentDto) throws StudentWithSuchAnIdDoesNotExistException, StudentDtoNullException {
         log.info("updateStudent() was called");
-        Optional<Student> existingStudent = studentRepository.findById(studentdto.getId());
-        if (existingStudent.isEmpty()) {
-            throw new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist.");
+        if (checkIfStudentDtoIsNotEmpty(studentDto)) {
+            Optional<Student> existingStudent = studentRepository.findById(studentDto.getId());
+            if (checkIfStudentExistsById(existingStudent.get().getId())) {
+                throw new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist. Method: updateStudent() in StudentServiceImpl");
+            } else {
+                existingStudent.get().setName(studentDto.getName());
+                existingStudent.get().setAge(studentDto.getAge());
+                existingStudent.get().setEmail(studentDto.getEmail());
+                return studentRepository.save(existingStudent.get());
+            }
         } else {
-            existingStudent.get().setName(studentdto.getName());
-            existingStudent.get().setAge(studentdto.getAge());
-            existingStudent.get().setEmail(studentdto.getEmail());
-            return studentRepository.save(existingStudent.get());
+            throw new StudentDtoNullException("StudentDto is null in StudentServiceImpl updateStudent()");
         }
     }
 
@@ -71,7 +95,7 @@ public class StudentServiceImpl implements StudentService {
         if (studentRepository.existsById(id)) {
             return studentRepository.existsById(id);
         } else {
-            throw new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist.");
+            throw new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist. Method: checkIfStudentExistsById() in StudentServiceImpl");
         }
     }
 
@@ -84,6 +108,25 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    public List<StudentDto> findAllStudentsButReturnAsStudentDto() {
+        List<StudentDto> listOfCurrentStudentsWithValuesButConvertedToStudentDTO = new ArrayList<>();
+        log.info("findAllStudentsButReturnAsStudentDto() was called");
+        List<Student> studentListWithActualValues = studentRepository.findAll();
+        for (int i = 0; i < studentListWithActualValues.size(); i++) {
+//            if (studentListWithActualValues.get(i) != null && checkIfStudentIsNotEmpty(studentListWithActualValues.get(i))) {
+                StudentDto studentDto = new StudentDto();
+                studentDto.setId(studentListWithActualValues.get(i).getId());
+                studentDto.setName(studentListWithActualValues.get(i).getName());
+                studentDto.setAge(studentListWithActualValues.get(i).getAge());
+                studentDto.setEmail(studentListWithActualValues.get(i).getEmail());
+                listOfCurrentStudentsWithValuesButConvertedToStudentDTO.add(studentDto);
+//            } else {
+//                throw new StudentNullException("StudentDto is null in StudentServiceImpl findAllStudentsButReturnAsStudentDto()");
+//            }
+        }
+        return listOfCurrentStudentsWithValuesButConvertedToStudentDTO;
+    }
+
     public List<Student> findAllStudents() {
         log.info("finAll() was called");
         return studentRepository.findAll();
@@ -91,7 +134,11 @@ public class StudentServiceImpl implements StudentService {
 
     public void deleteStudentById(int id) {
         log.info("deleteStudentById() was called");
-        studentRepository.deleteById(id);
+        if (studentRepository.existsById(id)) {
+            studentRepository.deleteById(id);
+        } else {
+            throw new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist and therefore can not be deleted. Method: deleteStudentByIdd() in StudentServiceImpl");
+        }
     }
 
     public Class checkClassOfStudentTable() {
