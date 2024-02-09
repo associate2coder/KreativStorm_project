@@ -20,5 +20,4 @@ public interface EnrolmentService {
      */
     Student unenroll(int studentId, int courseId);
 
-
 }
