@@ -1,6 +1,6 @@
-package com.springbootproject.dto;
+package com.springbootproject.dto.student;
 
-import lombok.AllArgsConstructor;
+import com.springbootproject.dto.student.StudentDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

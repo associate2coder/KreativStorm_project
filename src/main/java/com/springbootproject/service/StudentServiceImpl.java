@@ -1,6 +1,6 @@
 package com.springbootproject.service;
 
-import com.springbootproject.dto.StudentDto;
+import com.springbootproject.dto.student.StudentDto;
 import com.springbootproject.exception.student.*;
 import com.springbootproject.object.Student;
 import com.springbootproject.repository.StudentRepository;
@@ -19,22 +19,64 @@ public class StudentServiceImpl implements StudentService {
     @Autowired
     StudentRepository studentRepository;
 
-    public boolean checkIfStudentDtoIsNotEmpty(StudentDto studentDto) throws StudentDtoNullException {
-        log.info("checkIfStudentDtoIsNotEmpty() was called");
-        if (studentDto != null && !studentDto.getName().isBlank() && 1 <= studentDto.getAge()
-                && !studentDto.getEmail().isBlank()) {
+    public boolean checkIfStudentDtoIsValid(StudentDto studentDto) throws StudentDtoNullException, StudentDtoWrongIdException,
+            StudentDtoWrongNameException, StudentDtoWrongAgeException, StudentDtoWrongEmailException {
+        log.info("checkIfStudentDtoIsValid() was called");
+        if (studentDto == null) {
+            throw new StudentDtoNullException("StudentDto is null or contains empty fields. Method: checkIfStudentDtoIsValid() in StudentServiceImpl");
+        }
+        if (studentDto.getId() <= 0) {
+            throw new StudentDtoWrongIdException("StudentDto.getId() is 0 or below 0. Method: checkIfStudentDtoIsValid() in StudentServiceImpl");
+        }
+        if (studentDto.getName().isBlank()) {
+            throw new StudentDtoWrongNameException("StudentDto.getName() is blank. Method: checkIfStudentDtoIsValid() in StudentServiceImpl");
+        }
+        if (studentDto.getAge() <= 0) {
+            throw new StudentDtoWrongAgeException("StudentDto.getAge() is 0 or below 0. Method: checkIfStudentDtoIsValid() in StudentServiceImpl");
+        }
+        if (studentDto.getEmail().isBlank() || !isValidEmail(studentDto.getEmail())) {
+            throw new StudentDtoWrongEmailException("StudentDto.getEmail() is blank. Method: checkIfStudentDtoIsValid() in StudentServiceImpl");
+        }
+
+
+        if (studentDto != null && 0 < studentDto.getId() && !studentDto.getName().isBlank() && 0 < studentDto.getAge()
+                && !studentDto.getEmail().isBlank() && isValidEmail(studentDto.getEmail())) {
             return true;
         } else {
-            throw new StudentDtoNullException("StudentDto is null or contains empty fields. Method: checkIfStudentDtoIsNotEmpty() in StudentServiceImpl");
+            return false;
         }
     }
-    public boolean checkIfStudentIsNotEmpty(Student student) throws StudentNullException {
-        log.info("checkIfStudentIsNotEmpty() was called");
 
-        if (student != null && student.getId() != 0 && !student.getName().isBlank() && 1 <= student.getAge() && !student.getEmail().isBlank()) {
+    private boolean isValidEmail(String email) {
+        String regex = "^[^@.]+@[^@.]+\\.[^@.]+$";
+        return email.matches(regex);
+    }
+
+    public boolean checkIfStudentIsValid(Student student) throws StudentNullException, StudentWrongIdException,
+            StudentWrongNameException, StudentWrongAgeException, StudentWrongEmailException {
+        log.info("checkIfStudentIsValid() was called");
+        if (student == null) {
+            throw new StudentNullException("Student is null or contains empty fields. Method: checkIfStudentIsValid() in StudentServiceImpl");
+        }
+        if (student.getId() <= 0) {
+            throw new StudentWrongIdException("Student.getId() is 0 or below 0. Method: checkIfStudentIsValid() in StudentServiceImpl");
+        }
+        if (student.getName().isBlank()) {
+            throw new StudentWrongNameException("Student.getName() is blank. Method: checkIfStudentIsValid() in StudentServiceImpl");
+        }
+        if (student.getAge() <= 0) {
+            throw new StudentWrongAgeException("Student.getAge() is 0 or below 0. Method: checkIfStudentIsValid() in StudentServiceImpl");
+        }
+        if (student.getEmail().isBlank() || !isValidEmail(student.getEmail())) {
+            throw new StudentWrongEmailException("Student.getEmail() is blank. Method: checkIfStudentIsValid() in StudentServiceImpl");
+        }
+
+
+        if (student != null && 0 < student.getId() && !student.getName().isBlank() && 0 < student.getAge()
+                && !student.getEmail().isBlank() && isValidEmail(student.getEmail())) {
             return true;
         } else {
-            throw new StudentNullException("Student is null or contains empty fields. Method: checkIfStudentIsNotEmpty() in StudentServiceImpl");
+            return false;
         }
     }
 
@@ -51,11 +93,13 @@ public class StudentServiceImpl implements StudentService {
 
     public Student saveStudent(StudentDto studentDto) throws StudentDtoNullException {
         log.info("saveStudent() was called");
-        if (checkIfStudentDtoIsNotEmpty(studentDto)) {
-            Student student = new Student(studentDto.getId(), studentDto.getName(), studentDto.getAge(), studentDto.getEmail());
+        if (checkIfStudentDtoIsValid(studentDto)) {
+            Student student = new Student(
+                    studentDto.getId(), studentDto.getName(), studentDto.getAge(), studentDto.getEmail()
+            );
             return studentRepository.save(student);
         } else {
-            throw new StudentDtoNullException("StudentDto is null in StudentServiceImpl saveStudent()");
+            throw new StudentDtoException("StudentDto values are wrong. Method: saveStudent() in StudentServiceImpl");
         }
     }
 
@@ -64,7 +108,7 @@ public class StudentServiceImpl implements StudentService {
         List<Student> studentList = new ArrayList<>();
 
         for (int i = 0; i < studentDtoList.size(); i++) {
-            if (studentDtoList != null && studentDtoList.get(i) != null && checkIfStudentDtoIsNotEmpty(studentDtoList.get(i))) {
+            if (studentDtoList != null && studentDtoList.get(i) != null && checkIfStudentDtoIsValid(studentDtoList.get(i))) {
                 Student student = new Student();
                 student.setId(studentDtoList.get(i).getId());
                 student.setName(studentDtoList.get(i).getName());
@@ -80,45 +124,42 @@ public class StudentServiceImpl implements StudentService {
 
     public Student updateStudent(StudentDto studentDto) throws StudentWithSuchAnIdDoesNotExistException, StudentDtoNullException {
         log.info("updateStudent() was called");
-        if (checkIfStudentDtoIsNotEmpty(studentDto)) {
-            Optional<Student> existingStudent = studentRepository.findById(studentDto.getId());
-            if (checkIfStudentExistsById(existingStudent.get().getId())) {
-                throw new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist. Method: updateStudent() in StudentServiceImpl");
-            } else {
-                existingStudent.get().setName(studentDto.getName());
-                existingStudent.get().setAge(studentDto.getAge());
-                existingStudent.get().setEmail(studentDto.getEmail());
-                return studentRepository.save(existingStudent.get());
-            }
+        if (checkIfStudentDtoIsValid(studentDto)) {
+            Student existingStudent = findStudentById(studentDto.getId());
+                existingStudent.setName(studentDto.getName());
+                existingStudent.setAge(studentDto.getAge());
+                existingStudent.setEmail(studentDto.getEmail());
+                return studentRepository.save(existingStudent);
         } else {
-            throw new StudentDtoNullException("StudentDto is null in StudentServiceImpl updateStudent()");
+            throw new StudentDtoException("StudentDto is invalid. Method: updateStudent() in StudentServiceImpl");
         }
     }
 
-    public boolean checkIfStudentExistsById(int id) throws StudentWithSuchAnIdDoesNotExistException {
+    public boolean checkIfStudentExistsById(Optional<Student> student) throws StudentWithSuchAnIdDoesNotExistException {
         log.info("checkIfStudentExistsById() was called");
-        if (studentRepository.existsById(id)) {
-            return studentRepository.existsById(id);
+        if (studentRepository.existsById(student.get().getId())) {
+            return true;
         } else {
             throw new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist. Method: checkIfStudentExistsById() in StudentServiceImpl");
         }
     }
 
-    public Optional<Student> findStudentById(int id) throws StudentWithSuchAnIdDoesNotExistException {
+    public Student findStudentById(int id) throws StudentWithSuchAnIdDoesNotExistException {
         log.info("findStudentById() was called");
-        if (studentRepository.findById(id) != null) {
-            return studentRepository.findById(id);
+        Optional<Student> optionalStudent = studentRepository.findById(id);
+        if (optionalStudent != null && optionalStudent.isPresent()) {
+            return optionalStudent.get();
         } else {
-            throw new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist.");
+            throw new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist. Method: findStudentById() in StudentServiceImpl");
         }
     }
 
-    public List<StudentDto> findAllStudentsButReturnAsStudentDto() {
+    public List<StudentDto> findAllStudentsButReturnAsStudentDtoList() {
         List<StudentDto> listOfCurrentStudentsWithValuesButConvertedToStudentDTO = new ArrayList<>();
-        log.info("findAllStudentsButReturnAsStudentDto() was called");
+        log.info("findAllStudentsButReturnAsStudentDtoList() was called");
         List<Student> studentListWithActualValues = findAllStudents();
         for (int i = 1; i < studentListWithActualValues.size(); i++) {
-            if (studentListWithActualValues.get(i) != null && checkIfStudentIsNotEmpty(studentListWithActualValues.get(i))) {
+            if (studentListWithActualValues.get(i) != null && checkIfStudentIsValid(studentListWithActualValues.get(i))) {
                 StudentDto studentDto = new StudentDto();
                 studentDto.setId(studentListWithActualValues.get(i).getId());
                 studentDto.setName(studentListWithActualValues.get(i).getName());
@@ -126,7 +167,7 @@ public class StudentServiceImpl implements StudentService {
                 studentDto.setEmail(studentListWithActualValues.get(i).getEmail());
                 listOfCurrentStudentsWithValuesButConvertedToStudentDTO.add(studentDto);
             } else {
-                throw new StudentNullException("Student in studentTable is null and therefore invalid. Method: findAllStudentsButReturnAsStudentDto() in StudentServiceImpl");
+                throw new StudentNullException("Student in studentTable is null and therefore invalid. Method: findAllStudentsButReturnAsStudentDtoList() in StudentServiceImpl");
             }
         }
         return listOfCurrentStudentsWithValuesButConvertedToStudentDTO;

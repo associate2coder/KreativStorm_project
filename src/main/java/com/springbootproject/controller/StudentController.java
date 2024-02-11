@@ -1,8 +1,8 @@
 package com.springbootproject.controller;
 
-import com.springbootproject.dto.IdDto;
-import com.springbootproject.dto.StudentDto;
-import com.springbootproject.dto.StudentDtoListDto;
+import com.springbootproject.dto.student.StudentIdDto;
+import com.springbootproject.dto.student.StudentDto;
+import com.springbootproject.dto.student.StudentDtoListDto;
 import com.springbootproject.exception.student.StudentDtoListDtoInputException;
 import com.springbootproject.exception.student.StudentDtoNullException;
 import com.springbootproject.exception.student.StudentWithSuchAnIdDoesNotExistException;
@@ -35,7 +35,7 @@ public interface StudentController {
 
     String findAllStudents(Model model);
 
-    String deleteStudentById(@ModelAttribute IdDto idOfStudentToBeDeleted, Model model);
+    String deleteStudentById(@ModelAttribute StudentIdDto idOfStudentToBeDeleted, Model model);
 
     String countAllTheRowsInTheStudentTable(Model model);
 

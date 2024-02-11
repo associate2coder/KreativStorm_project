@@ -1,6 +1,6 @@
 package com.springbootproject.service;
 
-import com.springbootproject.dto.StudentDto;
+import com.springbootproject.dto.student.StudentDto;
 import com.springbootproject.exception.student.StudentDtoNullException;
 import com.springbootproject.exception.student.StudentNullException;
 import com.springbootproject.exception.student.StudentTableIsEmptyException;
@@ -11,9 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface StudentService {
-    boolean checkIfStudentDtoIsNotEmpty(StudentDto studentDto) throws StudentDtoNullException;
+    boolean checkIfStudentDtoIsValid(StudentDto studentDto) throws StudentDtoNullException;
 
-    boolean checkIfStudentIsNotEmpty(Student student) throws StudentNullException;
+    boolean checkIfStudentIsValid(Student student) throws StudentNullException;
 
     long countAllTheStudentTableRows() throws StudentTableIsEmptyException;
 
@@ -23,13 +23,13 @@ public interface StudentService {
 
     Student updateStudent(StudentDto studentdto) throws StudentWithSuchAnIdDoesNotExistException, StudentDtoNullException;
 
-    boolean checkIfStudentExistsById(int id) throws StudentWithSuchAnIdDoesNotExistException;
+    boolean checkIfStudentExistsById(Optional<Student> student) throws StudentWithSuchAnIdDoesNotExistException;
 
-    Optional<Student> findStudentById(int id) throws StudentWithSuchAnIdDoesNotExistException;
+   Student findStudentById(int id) throws StudentWithSuchAnIdDoesNotExistException;
 
     List<Student> findAllStudents() throws StudentTableIsEmptyException;
 
-    List<StudentDto> findAllStudentsButReturnAsStudentDto();
+    List<StudentDto> findAllStudentsButReturnAsStudentDtoList();
 
     void deleteStudentById(int id) throws StudentWithSuchAnIdDoesNotExistException;
 

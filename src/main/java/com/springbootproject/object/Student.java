@@ -42,12 +42,4 @@ public class Student {
         this.age = age;
         this.email = email;
     }
-
-//    private Course getDefaultCourse() {
-//        Course defaultCourse = new Course();
-//        defaultCourse.setId(1);
-//        defaultCourse.setName("Unassigned");
-//        defaultCourse.setTeacher("No Teacher");
-//        return defaultCourse;
-//    }
 }
