@@ -27,7 +27,7 @@ public class TeacherServiceImpl implements TeacherService {
         }
     }
 
-    public Teacher getTeacherById(Long id) {
+    public Teacher getTeacherById(int id) {
         Teacher teacher = teacherRepository.findById(id)
                 .orElseThrow(() -> new TeacherWithSuchAnIdDoesNotExistException(
                         "Teacher with such an Id does not exist."
@@ -39,7 +39,7 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherRepository.save(teacher);
     }
 
-    public void deleteTeacherById(Long id) {
+    public void deleteTeacherById(int id) {
         teacherRepository.deleteById(id);
     }
 }

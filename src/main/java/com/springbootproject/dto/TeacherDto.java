@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class TeacherDto {
 
-    private long id;
+    private int id;
     private String name;
     private String email;
 }
