@@ -2,6 +2,7 @@ package com.springbootproject.controller;
 
 import com.springbootproject.object.Course;
 import com.springbootproject.service.AdminService;
+import com.springbootproject.service.TeacherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,10 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin/course")
 public class AdminController {
     private final AdminService adminService;
+    private final TeacherService teacherService;
 
     @Autowired
-    public AdminController(AdminService adminService) {
+    public AdminController(AdminService adminService, TeacherService teacherService) {
         this.adminService = adminService;
+        this.teacherService = teacherService;
     }
 
     @GetMapping()
@@ -30,7 +33,9 @@ public class AdminController {
     }
 
     @GetMapping("new")
-    public String newPersonForm(@ModelAttribute("course") Course course){
+    public String newPersonForm(Model model){
+        model.addAttribute("course", new Course());
+        model.addAttribute("teacherList", teacherService.getAllTeachers());
         return "admin/new";
     }
 
@@ -43,6 +48,7 @@ public class AdminController {
     @GetMapping("{id}/edit")
     public String edit(Model model, @PathVariable("id") int id){
         model.addAttribute("course", adminService.show(id));
+        model.addAttribute("teacherList", teacherService.getAllTeachers());
         return "admin/edit";
     }
 

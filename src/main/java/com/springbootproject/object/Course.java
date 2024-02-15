@@ -17,8 +17,12 @@ public class Course {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "teacher", nullable = false)
-    private String teacher;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "courseList")
+    private Teacher teacher;
+
+    @Column(name = "capacity", nullable = false)
+    private int capacity;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "course")
     private List<Student> studentList;

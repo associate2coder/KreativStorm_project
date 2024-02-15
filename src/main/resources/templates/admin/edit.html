@@ -10,8 +10,14 @@
     <label for="name">Enter name: </label>
     <input type="text" th:field="*{name}" id="name">
     <br/>
-    <label for="teacher">Enter teacher: </label>
-    <input type="text" th:field="*{teacher}" id="teacher">
+    <br/>
+    <select th:field="*{teacher}" name="teacher" id="teacher">
+        <option value="">Select Teacher</option>
+        <option th:each="teacher : ${teacherList}"
+                th:value="${teacher}"
+                th:text="${teacher.name}"></option>
+    </select>
+    <br/>
     <br/>
     <input type="submit" value="Update">
 </form>

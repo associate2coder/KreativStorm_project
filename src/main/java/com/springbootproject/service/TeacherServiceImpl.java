@@ -19,7 +19,10 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherRepository.findAll();
     }
     public Teacher saveTeacher(TeacherDto teacherDto) {
-        Teacher teacher = new Teacher(teacherDto.getId(), teacherDto.getName(), teacherDto.getEmail());
+        Teacher teacher = new Teacher();
+        teacher.setId(teacherDto.getId());
+        teacher.setName(teacherDto.getName());
+        teacher.setEmail(teacherDto.getEmail());
         try {
         return teacherRepository.save(teacher);
         } catch (DataIntegrityViolationException e) {

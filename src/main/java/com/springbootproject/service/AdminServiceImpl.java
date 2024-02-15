@@ -1,5 +1,6 @@
 package com.springbootproject.service;
 
+import com.springbootproject.exception.ElementNotFoundException;
 import com.springbootproject.object.Course;
 import com.springbootproject.repository.CourseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     public Course show(int id) {
-        return courseRepository.findById(id).get();
+        return courseRepository.findById(id).orElseThrow(() -> new ElementNotFoundException("Course not found with id: " + id));
     }
 
     @Override
