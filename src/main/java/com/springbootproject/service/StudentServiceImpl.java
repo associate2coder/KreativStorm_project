@@ -16,12 +16,14 @@ import java.util.Optional;
 @Slf4j
 public class StudentServiceImpl implements StudentService {
 
+    // TODO @LeksUkr I suggest using constructor autowiringm as it is considered as a good practice.
     @Autowired
     StudentRepository studentRepository;
 
+    // TODO @LeksUkr: check how @Validated annotation works
     public boolean checkIfStudentDtoIsValid(StudentDto studentDto) throws StudentDtoNullException, StudentDtoWrongIdException,
             StudentDtoWrongNameException, StudentDtoWrongAgeException, StudentDtoWrongEmailException {
-        log.info("checkIfStudentDtoIsValid() was called");
+        log.info("checkIfStudentDtoIsValid() was called"); // TODO @LeksUkr: logs like this should be moved to debug or even trace level
         if (studentDto == null) {
             throw new StudentDtoNullException("StudentDto is null or contains empty fields. Method: checkIfStudentDtoIsValid() in StudentServiceImpl");
         }
@@ -91,6 +93,8 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
+    // TODO @LeksUkr "public Student saveStudent(@Validated StudentDto studentDto) -> this will trigger jakarta validation annotations in Dto Object
+
     public Student saveStudent(StudentDto studentDto) throws StudentDtoNullException {
         log.info("saveStudent() was called");
         if (checkIfStudentDtoIsValid(studentDto)) {
@@ -137,11 +141,12 @@ public class StudentServiceImpl implements StudentService {
 
     public boolean checkIfStudentExistsById(Optional<Student> student) throws StudentWithSuchAnIdDoesNotExistException {
         log.info("checkIfStudentExistsById() was called");
-        if (studentRepository.existsById(student.get().getId())) {
+        if (studentRepository.existsById(student.get().getId())) { // TODO @LeksUkr this may throw NullPointerException
             return true;
         } else {
             throw new StudentWithSuchAnIdDoesNotExistException("Student with such an id does not exist. Method: checkIfStudentExistsById() in StudentServiceImpl");
         }
+        // TODO @LeksUkr: method never returns false. If somebody is working with your code, he/she might expect to return false instead of throwing an exception
     }
 
     public Student findStudentById(int id) throws StudentWithSuchAnIdDoesNotExistException {

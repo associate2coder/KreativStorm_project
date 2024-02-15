@@ -20,11 +20,11 @@ public class Student {
     private int id;
 
     @Column
-    @NotBlank(message = "name must have a value")
+    @NotBlank(message = "name must have a value") // TODO @LeksUkr: This validation should be at the Dto level
     private String name;
 
     @Column
-    @Min(value = 1, message = "must have a value and be above 1")
+    @Min(value = 1, message = "must have a value and be above 1") // TODO @LeksUkr: This validation should be at the Dto level
     private int age;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
@@ -32,8 +32,8 @@ public class Student {
     private Course course;
 
     @Column
-    @NotBlank(message = "email must have a value")
-    @Email
+    @NotBlank(message = "email must have a value") // TODO @LeksUkr: This validation should be at the Dto level
+    @Email // TODO @LeksUkr: This validation should be at the Dto level
     private String email;
 
     public Student(int id, String name, int age, String email) {

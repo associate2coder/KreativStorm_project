@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+// TODO @LeksUkr: No need for StudentController interface here.
+
 @Controller
 @Slf4j
 public class StudentControllerImpl implements StudentController {
