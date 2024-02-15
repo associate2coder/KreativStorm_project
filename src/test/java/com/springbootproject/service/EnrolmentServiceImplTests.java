@@ -4,6 +4,7 @@ import com.springbootproject.exception.ElementNotFoundException;
 import com.springbootproject.exception.EnrollmentStatusException;
 import com.springbootproject.object.Course;
 import com.springbootproject.object.Student;
+import com.springbootproject.object.Teacher;
 import com.springbootproject.repository.CourseRepository;
 import com.springbootproject.repository.StudentRepository;
 import org.junit.jupiter.api.*;
@@ -38,34 +39,50 @@ public class EnrolmentServiceImplTests {
     private static Student enrolledStudent;
     private static Student unenrolledStudent;
 
+    private static Teacher testTeacher;
+
     @BeforeAll
     public static void init() {
+
+        // setting a test teacher
+        testTeacher = Teacher.builder()
+                .id(1)
+                .name("Andrew Ng")
+                .email("AndrewNg@coursera.com")
+                .build();
+
         // setting a test course 1
-        testCourse1 = new Course();
-        testCourse1.setId(1);
-        testCourse1.setName("Java for beginners");
-        testCourse1.setTeacher("Teacher #1 name");
+        testCourse1 = Course.builder()
+                .id(1)
+                .name("Java for beginners")
+                .capacity(20)
+                .teacher(testTeacher)
+                .build();
 
         // setting a test course 2
-        testCourse2 = new Course();
-        testCourse2.setId(2);
-        testCourse2.setName("Docker for DevOps specialists");
-        testCourse2.setTeacher("Teacher #4 name");
+        testCourse1 = Course.builder()
+                .id(1)
+                .name("Docker for DevOps specialists")
+                .capacity(20)
+                .teacher(testTeacher)
+                .build();
 
         // setting a test enrolled Student
-        enrolledStudent = new Student();
-        enrolledStudent.setId(1);
-        enrolledStudent.setName("John Smith");
-        enrolledStudent.setAge(20);
-        enrolledStudent.setEmail("jsmith@gmail.com");
-        enrolledStudent.setCourse(testCourse1);
+        enrolledStudent = Student.builder()
+                .id(1)
+                .name("John Smith")
+                .age(20)
+                .email("jsmith@gmail.com")
+                .course(testCourse1)
+                .build();
 
         // setting a test unenrolled Student
-        unenrolledStudent = new Student();
-        unenrolledStudent.setId(2);
-        unenrolledStudent.setName("Veronica Adams");
-        unenrolledStudent.setAge(18);
-        unenrolledStudent.setEmail("vadams@gmail.com");
+        unenrolledStudent = Student.builder()
+                .id(2)
+                .name("Veronica Adams")
+                .age(18)
+                .email("vadams@gmail.com")
+                .build();
     }
 
     @BeforeEach

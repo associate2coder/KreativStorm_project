@@ -4,8 +4,10 @@ import com.springbootproject.exception.ElementNotFoundException;
 import com.springbootproject.object.Course;
 import com.springbootproject.object.Student;
 import com.springbootproject.exception.EnrollmentStatusException;
+import com.springbootproject.object.Teacher;
 import com.springbootproject.repository.CourseRepository;
 import com.springbootproject.repository.StudentRepository;
+import com.springbootproject.repository.TeacherRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,43 +20,52 @@ public class EnrolmentServiceImpl implements EnrolmentService {
 
     private final StudentRepository studentRepository;
     private final CourseRepository courseRepository;
+    private final TeacherRepository teacherRepository;
 
 
-    // TODO Delete (to be used for testing only)
-//    @PostConstruct
-//    public void init() {
-//        Student student1 = new Student();
-//        student1.setName("John Smith");
-//        student1.setAge(20);
-//        student1.setEmail("jsmith@gmail.com");
-//        studentRepository.save(student1);
-//
-//        Student student2 = new Student();
-//        student2.setName("Veronica Adams");
-//        student2.setAge(18);
-//        student2.setEmail("vadams@gmail.com");
-//        studentRepository.save(student2);
-//
-//        Course course1 = new Course();
-//        course1.setName("Java for beginners");
-//        course1.setTeacher("Teacher #1 name");
-//        courseRepository.save(course1);
-//
-//        Course course2 = new Course();
-//        course2.setName("Spring Boot for beginners");
-//        course2.setTeacher("Teacher #2 name");
-//        courseRepository.save(course2);
-//
-//        Course course3 = new Course();
-//        course3.setName("Advance Java for developers");
-//        course3.setTeacher("Teacher #3 name");
-//        courseRepository.save(course3);
-//
-//        Course course4 = new Course();
-//        course4.setName("Docker for DevOps specialists");
-//        course4.setTeacher("Teacher #4 name");
-//        courseRepository.save(course4);
-//    }
+    @PostConstruct
+    public void init() {
+
+        studentRepository.deleteAll();
+        courseRepository.deleteAll();
+        teacherRepository.deleteAll();
+
+        studentRepository.save(Student.builder()
+                .name("John Smith")
+                .age(20)
+                .email("jsmith@gmail.com")
+                .build());
+
+        studentRepository.save(Student.builder()
+                .name("Veronica Adams")
+                .age(18)
+                .email("vadams@gmail.com")
+                .build());
+
+        Teacher teacher = teacherRepository.save(Teacher.builder()
+                .name("Andrew Ng")
+                .email("andrewNg@coursera.com")
+                .build());
+
+        courseRepository.save(Course.builder()
+                .name("Java for beginners")
+                .teacher(teacher)
+                .capacity(20)
+                .build());
+
+        courseRepository.save(Course.builder()
+                .name("Spring Boot for beginners")
+                .teacher(teacher)
+                .capacity(20)
+                .build());
+
+        courseRepository.save(Course.builder()
+                .name("Advance Java for developers")
+                .teacher(teacher)
+                .capacity(20)
+                .build());
+
+    }
 
 
     @Override
@@ -75,11 +86,10 @@ public class EnrolmentServiceImpl implements EnrolmentService {
                 .orElseThrow(() -> new ElementNotFoundException("Course not found with id " + courseId));
 
         // check if desired course has vacant seats
-        // TODO waiting for capacity field
-//        if (course.getStudentList().size() >= course.getCapacity()) {
-//            String message = String.format("Unable to enrol as the course %s is full. Please choose another course.", course.getName());
-//            throw new EnrollmentStatusException(message);
-//        }
+        if (course.getStudentList().size() >= course.getCapacity()) {
+            String message = String.format("Unable to enrol as the course %s is full. Please choose another course.", course.getName());
+            throw new EnrollmentStatusException(message);
+        }
 
         // update the student record
         student.setCourse(course);
